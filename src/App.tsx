@@ -16,8 +16,7 @@ const App = () => {
         <TodosContextProvider>
             <Routes>
                 <Route index element={<Navigate replace to="todo" />} />
-                <Route path="todo" element={<Todos />}>
-                </Route>
+                <Route path="todo" element={<Todos />} />
                 <Route path="todo/:todoId" element={<DetailTodo />} />
                 <Route path="new" element={<NewTodo />} />
                 <Route path="account" element={<Account />} />

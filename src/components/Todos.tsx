@@ -8,7 +8,7 @@ const Todos: React.FC = () => {
     return (
         <ul>
             {todosCtx.todos.map(todo => (
-                <Todo key={todo.id} todo={todo} onRemoveTodo={todosCtx.removeTodo.bind(null, todo.id)} />
+                <Todo key={todo.id} todo={todo} onCheckTodo={todosCtx.checkTodo} />
             ))}
         </ul>
     );

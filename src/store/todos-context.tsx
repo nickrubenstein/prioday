@@ -5,14 +5,14 @@ type TodosContextType = {
     todos: TodoModel[];
     addTodo: (todo: TodoModel) => void;
     replaceTodo: (todo: TodoModel) => void;
-    removeTodo: (id: string) => void;
+    checkTodo: (action: string, todo: TodoModel) => void;
 };
 
 export const TodosContext = React.createContext<TodosContextType>({
     todos: [],
     addTodo: (todo: TodoModel) => { },
     replaceTodo: (todo: TodoModel) => {},
-    removeTodo: (id: string) => { }
+    checkTodo: (action: string, todo: TodoModel) => { }
 });
 
 const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => {
@@ -37,17 +37,27 @@ const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => 
         });
     };
 
-    const removeTodoHandler = (id: string) => {
-        setTodos((prevTodos) => {
-            return prevTodos.filter(todo => todo.id !== id);
-        })
+    const checkTodoHandler = (action: string, todo: TodoModel) => {
+        if (action === 'DONE') {
+            console.log(todo);
+            if (todo.repeat) {
+                todo.lastDone = new Date().toTimeString();
+                setTodos((prevTodos) => [...prevTodos]);
+            }
+            else {
+                setTodos((prevTodos) => {
+                    return prevTodos.filter(t => t.id !== todo.id);
+                })
+            }
+        }
+        
     };
 
     const contextValue: TodosContextType = {
         todos: todos,
         addTodo: addTodoHandler,
         replaceTodo: replaceTodoHandler,
-        removeTodo: removeTodoHandler
+        checkTodo: checkTodoHandler
     };
 
     return <TodosContext.Provider value={contextValue}>
