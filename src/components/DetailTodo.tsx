@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { Fragment, useContext } from "react";
 import { useParams } from "react-router-dom";
 import TodoModel from "../models/todo";
 import { TodosContext } from "../store/todos-context";
@@ -17,7 +17,10 @@ const DetailTodo: React.FC = () => {
         todosCtx.replaceTodo(todo);
     };
 
-    return <FormTodo todo={todo} onSubmit={submitHandler}/>;
+    return <Fragment>
+        <h1>Edit Task</h1>
+        <FormTodo todo={todo} onSubmit={submitHandler}/>
+    </Fragment>;
 }
 
 export default DetailTodo;

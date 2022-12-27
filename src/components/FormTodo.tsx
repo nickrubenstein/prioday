@@ -34,11 +34,11 @@ const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void
 
     return (
         <form onSubmit={submitHandler}>
-            <label htmlFor="text">Todo text</label>
+            <label htmlFor="text">Task Name</label>
             <input type="text" id="text" value={todo.text} onChange={handleTextChange}/>
             <label htmlFor="repeat">Repeat</label>
             <input type="checkbox" id="repeat" checked={todo.repeat} onChange={handleRepeatChange}/>
-            <button>{isNew ? 'Create Todo' : 'Save Changes'}</button>
+            <button>{isNew ? 'Create Task' : 'Save Changes'}</button>
         </form>
     );
 }

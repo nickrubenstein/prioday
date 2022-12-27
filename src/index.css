@@ -1,5 +1,10 @@
+html {
+    height: 100%;
+}
+
 body {
-    margin: 0.5rem;
+    height: 100%;
+    margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
         'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
         sans-serif;
@@ -8,16 +13,43 @@ body {
 }
 
 #root {
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
 
-div.grow {
+section {
+    margin: 0.5rem;
     flex-grow: 1;
 }
 
-div.row {
+nav {
     display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-content: center;
+    background-color: darkgrey;
+}
+
+/* Small screen nav flips to the bottom */
+@media all and (max-width: 800px) {
+    #root {
+        flex-direction: column-reverse;
+    }
+
+    nav {
+        height: 5rem;
+        font-size: 2rem;
+    }
+
+    nav > span {
+        background-color: grey;
+        width: 1px;
+    }
+}
+
+h1 {
+    text-align: center;
 }
 
 ul {

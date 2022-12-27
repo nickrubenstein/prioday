@@ -1,7 +1,7 @@
 
 const Account: React.FC = (props) => {
     return (
-        <h1>Your account</h1>
+        <h1>Your Account</h1>
     );
 }
 

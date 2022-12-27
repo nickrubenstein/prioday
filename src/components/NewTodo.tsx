@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { Fragment, useContext } from "react";
 import TodoModel from "../models/todo";
 import { TodosContext } from "../store/todos-context";
 import FormTodo from "./FormTodo";
@@ -11,7 +11,10 @@ const NewTodo: React.FC = () => {
     };
 
     return (
-        <FormTodo onSubmit={submitHandler}/>
+        <Fragment>
+            <h1>Create New Task</h1>
+            <FormTodo onSubmit={submitHandler}/>
+        </Fragment>
     );
 }
 
