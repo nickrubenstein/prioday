@@ -21,6 +21,7 @@ body {
 section {
     margin: 0.5rem;
     flex-grow: 1;
+    overflow-y: scroll;
 }
 
 nav {
@@ -33,9 +34,9 @@ nav {
 
 /* Small screen nav flips to the bottom */
 @media all and (max-width: 800px) {
-    #root {
-        flex-direction: column-reverse;
-    }
+    #root > :nth-child(1) { order: 3; }
+    #root > :nth-child(2) { order: 1; }
+    #root > :nth-child(3) { order: 2; }
 
     nav {
         height: 5rem;
@@ -60,6 +61,7 @@ ul {
 }
 
 li {
+    display: flex;
     margin: 1rem 0;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     padding: 1rem;

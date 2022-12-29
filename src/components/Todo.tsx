@@ -8,21 +8,24 @@ const Todo: React.FC<{ todo: TodoModel; onCheckTodo: (action: string, todo: Todo
     
     return (
         <li>
-            <NavLink to={props.todo.id} >{props.todo.text}</NavLink>
-            <span>{ " " + props.todo.frequency + " " }</span>
-            <span>{
-                props.todo.repeat ?
-                    props.todo.lastDone > 0
-                        ? " " + daySinceLastDone + "\tlast " + new Date(props.todo.lastDone).toLocaleDateString()
-                        : " new "
-                    : " 1 time "}
-            </span>
+            <div style={{ flex: "auto", marginRight: "0.5rem" }}>
+                <NavLink to={props.todo.id} >{props.todo.text}</NavLink>
+                <div style={{ display: "flex" }}>
+                    <span style={{ flex: "auto" }}>{
+                        props.todo.repeat ?
+                            props.todo.lastDone > 0
+                                ? new Date(props.todo.lastDone).toLocaleDateString() + " " + daySinceLastDone 
+                                : " new "
+                            : " 1 time "}
+                    </span>
+                    <span>{props.todo.frequency + " " + next(props.todo.lastDone, props.todo.frequency).toLocaleDateString()}</span>
+                </div>
+            </div>
             {
-                daySinceLastDone > 0 ?
-                    <button onClick={props.onCheckTodo.bind(null, 'DONE', props.todo)}>Done</button>
-                    : ""
-            }
-            <span>{",\tnext " + next(props.todo.lastDone, props.todo.frequency).toLocaleDateString()}</span>
+                    daySinceLastDone > 0 ?
+                        <button onClick={props.onCheckTodo.bind(null, 'DONE', props.todo)}>Done</button>
+                        : ""
+                }
         </li>
     );
 }

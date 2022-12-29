@@ -7,13 +7,14 @@ const Todos: React.FC = () => {
 
     return (
         <Fragment>
-            <h1>Prioday</h1>
-            <h1>{new Date().toLocaleDateString()}</h1>
-            <ul>
-                {todosCtx.todos.map(todo => (
-                    <Todo key={todo.id} todo={todo} onCheckTodo={todosCtx.checkTodo} />
-                ))}
-            </ul>
+            <h1>Prioday - {new Date().toLocaleDateString()}</h1>
+            <section>
+                <ul>
+                    {todosCtx.todos.map(todo => (
+                        <Todo key={todo.id} todo={todo} onCheckTodo={todosCtx.checkTodo} />
+                    ))}
+                </ul>
+            </section>
         </Fragment>
     );
 }
