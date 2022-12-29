@@ -20,18 +20,12 @@ const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void
     };
 
     const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value.trim();
-        if (value.length === 0) {
-            return;
-        }
+        const value = event.target.value;
         handleChange('text', value);
     };
 
     const handleFrequencyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value.trim();
-        if (value.length === 0) {
-            return;
-        }
+        const value = event.target.value;
         handleChange('frequency', value);
     };
 
