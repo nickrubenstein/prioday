@@ -27,6 +27,14 @@ const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void
         handleChange('text', value);
     };
 
+    const handleFrequencyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value.trim();
+        if (value.length === 0) {
+            return;
+        }
+        handleChange('frequency', value);
+    };
+
     const handleRepeatChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.checked;
         handleChange('repeat', value);
@@ -34,10 +42,21 @@ const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void
 
     return (
         <form onSubmit={submitHandler}>
-            <label htmlFor="text">Task Name</label>
-            <input type="text" id="text" value={todo.text} onChange={handleTextChange}/>
-            <label htmlFor="repeat">Repeat</label>
-            <input type="checkbox" id="repeat" checked={todo.repeat} onChange={handleRepeatChange}/>
+            <div>
+                <label htmlFor="text">Task Name</label>
+                <input type="text" id="text" value={todo.text} onChange={handleTextChange}/>
+            </div>
+            <div>
+                <label htmlFor="repeat">Repeat Forever</label>
+                <input type="checkbox" id="repeat" checked={todo.repeat} onChange={handleRepeatChange}/>
+            </div>
+            { todo.repeat 
+                ? <div>
+                    <label htmlFor="frequency">Frequency</label>
+                    <input type="frequency" id="frequency" value={todo.frequency} onChange={handleFrequencyChange}/>
+                </div>
+                : ""}
+
             <button>{isNew ? 'Create Task' : 'Save Changes'}</button>
         </form>
     );

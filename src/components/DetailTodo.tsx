@@ -19,6 +19,7 @@ const DetailTodo: React.FC = () => {
 
     return <Fragment>
         <h1>Edit Task</h1>
+        <div>{JSON.stringify(todo)}</div>
         <FormTodo todo={todo} onSubmit={submitHandler}/>
     </Fragment>;
 }
