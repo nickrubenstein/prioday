@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import TodoModel from "../models/todo";
 import { TodosContext } from "../store/todos-context";
 import FormTodo from "./FormTodo";
@@ -7,7 +7,6 @@ import FormTodo from "./FormTodo";
 const DetailTodo: React.FC = () => {
     const todosCtx = useContext(TodosContext);
     const { todoId } = useParams();
-    const navigate = useNavigate();
 
     const todo = todosCtx.todos.find(t => t.id === todoId);
     if (!todo) {
@@ -16,13 +15,12 @@ const DetailTodo: React.FC = () => {
 
     const submitHandler = (todo: TodoModel) => {
         todosCtx.replaceTodo(todo);
-        navigate("/todo");
     };
 
     return <Fragment>
         <h1>Edit Task</h1>
         <section>
-            <div>{JSON.stringify(todo)}</div>
+            <div>{JSON.stringify(todo, null, 2)}</div>
             <FormTodo todo={todo} onSubmit={submitHandler}/>
         </section>
     </Fragment>;

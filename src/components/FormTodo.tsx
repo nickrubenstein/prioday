@@ -34,6 +34,11 @@ const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void
         handleChange('repeat', value);
     };
 
+    const handleCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        handleChange('count', value);
+    };
+
     return (
         <form onSubmit={submitHandler}>
             <div>
@@ -47,12 +52,18 @@ const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void
                     <span className="slider round"></span>
                 </label>
             </div>
-            { todo.repeat 
-                ? <div>
+            { todo.repeat
+                ? 
+                <div>
                     <label htmlFor="frequency">Frequency</label>
                     <input type="frequency" id="frequency" value={todo.frequency} onChange={handleFrequencyChange}/>
                 </div>
-                : ""}
+                : 
+                <div>
+                    <label htmlFor="count">Repeat Count</label>
+                    <input type="number" id="count" value={todo.count} onChange={handleCountChange}/>
+                </div>
+            }
 
             <button>{isNew ? 'Create Task' : 'Save Changes'}</button>
         </form>

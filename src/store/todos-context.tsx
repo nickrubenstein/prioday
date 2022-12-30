@@ -10,6 +10,16 @@ type TodosContextType = {
 };
 
 const sortTodos = (a: TodoModel, b: TodoModel) => {
+    if (a.lastDone === 0) {
+        if (b.lastDone !== 0) {
+            return -1;
+        }
+    }
+    else {
+        if (b.lastDone === 0) {
+            return 1;
+        }
+    }
     const aNext = next(a.lastDone, a.frequency).getTime();
     const bNext = next(b.lastDone, b.frequency).getTime();
     if (aNext === bNext) {
@@ -29,21 +39,20 @@ const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => 
     const [todos, setTodos] = useState<TodoModel[]>(() => {
         const storage = localStorage.getItem("todos");
         const storageTodos = storage ? JSON.parse(storage) : [];
-        storageTodos.sort(sortTodos)
+        storageTodos.sort(sortTodos);
         console.log("getting todos");
         return storageTodos;
     });
 
     useEffect(() => {
         console.log("storing todos");
-        todos.sort(sortTodos);
         localStorage.setItem("todos", JSON.stringify(todos));
     }, [todos]);
 
     const addTodoHandler = (newTodo: TodoModel) => {
         console.log("add todos");
         setTodos(prevTodos => {
-            return prevTodos.concat(newTodo);
+            return [newTodo, ...prevTodos];
         });
     };
 
@@ -66,13 +75,21 @@ const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => 
         if (action === 'DONE') {
             console.log(todo);
             if (todo.repeat) {
+                todo.count++;
                 todo.lastDone = Date.now();
                 setTodos((prevTodos) => [...prevTodos]);
             }
             else {
-                setTodos((prevTodos) => {
-                    return prevTodos.filter(t => t.id !== todo.id);
-                })
+                todo.count--;
+                todo.lastDone = Date.now();
+                if (todo.count < 0) {
+                    setTodos((prevTodos) => {
+                        return prevTodos.filter(t => t.id !== todo.id);
+                    })
+                }
+                else {
+                    setTodos((prevTodos) => [...prevTodos]);
+                }
             }
         }
         

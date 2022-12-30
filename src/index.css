@@ -76,6 +76,19 @@ li {
     background-color: #f7f5ef;
 }
 
+.todo-done {
+    background-color: lightgreen;
+}
+.todo-missed {
+    background-color: salmon;    
+}
+.todo-today {
+    background-color: lightyellow;
+}
+.todo-future {
+    background-color: lightgrey;
+}
+
 form {
     max-width: 40rem;
     margin: 2rem auto;
