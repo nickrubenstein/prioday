@@ -42,7 +42,10 @@ const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void
             </div>
             <div>
                 <label htmlFor="repeat">Repeat Forever</label>
-                <input type="checkbox" id="repeat" checked={todo.repeat} onChange={handleRepeatChange}/>
+                <label className="switch">
+                    <input type="checkbox" id="repeat" checked={todo.repeat} onChange={handleRepeatChange}/>
+                    <span className="slider round"></span>
+                </label>
             </div>
             { todo.repeat 
                 ? <div>
