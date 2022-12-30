@@ -5,6 +5,7 @@ import { next, sortFrequencies } from "../util/frequency";
 type TodosContextType = {
     todos: TodoModel[];
     addTodo: (todo: TodoModel) => void;
+    deleteTodo: (todo: TodoModel) => void;
     replaceTodo: (todo: TodoModel) => void;
     checkTodo: (action: string, todo: TodoModel) => void;
 };
@@ -31,6 +32,7 @@ const sortTodos = (a: TodoModel, b: TodoModel) => {
 export const TodosContext = React.createContext<TodosContextType>({
     todos: [],
     addTodo: (todo: TodoModel) => { },
+    deleteTodo: (todo: TodoModel) => { },
     replaceTodo: (todo: TodoModel) => {},
     checkTodo: (action: string, todo: TodoModel) => { }
 });
@@ -54,6 +56,13 @@ const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => 
         setTodos(prevTodos => {
             return [newTodo, ...prevTodos];
         });
+    };
+
+    const deleteTodoHandler = (todo: TodoModel) => {
+        console.log("add todos");
+        setTodos((prevTodos) => {
+            return prevTodos.filter(t => t.id !== todo.id);
+        })
     };
 
     const replaceTodoHandler = (todo: TodoModel) => {
@@ -98,6 +107,7 @@ const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => 
     const contextValue: TodosContextType = {
         todos: todos,
         addTodo: addTodoHandler,
+        deleteTodo: deleteTodoHandler,
         replaceTodo: replaceTodoHandler,
         checkTodo: checkTodoHandler
     };
