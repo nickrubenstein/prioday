@@ -22,7 +22,7 @@ const Todo: React.FC<{ todo: TodoModel; onCheckTodo: (action: string, todo: Todo
                     <span>{ props.todo.lastDone > 0 ? lastDoneDate.toLocaleDateString() : "newly created" }</span>
                     <span>{
                         props.todo.lastDone > 0 ?
-                        (daySinceLastDone == 0 ? "done today" : " done " + daySinceLastDone + " days ago")
+                        (daySinceLastDone === 0 ? "done today" : " done " + daySinceLastDone + " days ago")
                         : "never done"
                     }
                     </span>
@@ -36,7 +36,7 @@ const Todo: React.FC<{ todo: TodoModel; onCheckTodo: (action: string, todo: Todo
                     <button onClick={props.onCheckTodo.bind(null, 'DONE', props.todo)}>Done</button>
                     : 
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <span>{ daysToNextDone + (daysToNextDone == 1 ? " day" : " days") } </span>
+                        <span>{ daysToNextDone + (daysToNextDone === 1 ? " day" : " days") } </span>
                         <span>{ props.todo.count + (props.todo.repeat ? " done" : " left") } </span>
                     </div>
             }
