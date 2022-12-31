@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import TodoModel from "../models/todo";
 import { TodosContext } from "../store/todos-context";
 import FormTodo from "./FormTodo";
@@ -15,7 +15,11 @@ const NewTodo: React.FC = () => {
 
     return (
         <Fragment>
-            <h1>Create New Task</h1>
+            <h1>
+                <NavLink to="/todo"><span className="icon-undo2"></span></NavLink>
+                Create New Task
+                <span></span>
+            </h1>
             <section>
                 <FormTodo onSubmit={submitHandler}/>
             </section>

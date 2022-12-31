@@ -16,8 +16,8 @@ const Todo: React.FC<{ todo: TodoModel; onCheckTodo: (action: string, todo: Todo
     
     return (
         <li className={statusClass}>
-            <div style={{ flex: "auto", marginRight: "0.5rem" }}>
-                <NavLink to={props.todo.id} >{props.todo.text}</NavLink>
+            <NavLink to={props.todo.id} style={{ flex: "auto", marginRight: "0.5rem" }} >
+                <div style={{ fontWeight: "bold" }}>{props.todo.text}</div>
                 <div style={{ display: "flex", justifyContent: "space-evenly" }}>
                     <span>{ props.todo.lastDone > 0 ? lastDoneDate.toLocaleDateString() : "newly created" }</span>
                     <span>{
@@ -30,10 +30,10 @@ const Todo: React.FC<{ todo: TodoModel; onCheckTodo: (action: string, todo: Todo
                         + nextDone.toLocaleDateString()}
                     </span>
                 </div>
-            </div>
+            </NavLink>
             {
                 daySinceLastDone > 0 ?
-                    <button onClick={props.onCheckTodo.bind(null, 'DONE', props.todo)}>Done</button>
+                    <button className="icon-checkmark check" onClick={props.onCheckTodo.bind(null, 'DONE', props.todo)}></button>
                     : 
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <span>{ daysToNextDone + (daysToNextDone === 1 ? " day" : " days") } </span>

@@ -1,4 +1,5 @@
 import { Fragment, useContext } from "react";
+import { NavLink } from "react-router-dom";
 import { TodosContext } from "../store/todos-context";
 import Todo from "./Todo";
 
@@ -7,7 +8,11 @@ const Todos: React.FC = () => {
 
     return (
         <Fragment>
-            <h1>Prioday - {new Date().toLocaleDateString()}</h1>
+                <h1>
+                    <NavLink to="/account"><span className="icon-user"></span></NavLink>
+                    Prioday - {new Date().toLocaleDateString()}
+                    <NavLink to="/new"><span className="icon-plus"></span></NavLink>
+                </h1>
             <section>
                 <ul>
                     {todosCtx.todos.map(todo => (

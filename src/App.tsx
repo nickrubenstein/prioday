@@ -1,6 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import TodosContextProvider from "./store/todos-context";
-import Nav from "./components/Nav";
 import Todos from "./components/Todos";
 import NewTodo from "./components/NewTodo";
 import Account from "./components/Account";
@@ -11,10 +10,9 @@ const NotFound = () => {
 };
 
 const App = () => {
-
     return (
         <TodosContextProvider>
-            <Nav />
+            {/* <Nav /> */}
             <Routes>
                 <Route index element={<Navigate replace to="todo" />} />
                 <Route path="todo" element={<Todos />} />

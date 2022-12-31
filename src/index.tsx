@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import './index.css';
+import './style/index.css';
+import './style/switch.css';
+import './style/icomoon/style.css';
 import App from './App';
 
 const root = ReactDOM.createRoot(
