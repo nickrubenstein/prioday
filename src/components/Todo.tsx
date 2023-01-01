@@ -36,7 +36,7 @@ const Todo: React.FC<{ todo: TodoModel; onCheckTodo: (action: string, todo: Todo
                     <span style={{width: '90px'}}>{nextDone.toLocaleDateString()}</span>
                 </div>
             </NavLink>
-            <div style={{width: '50px'}}>{
+            <div style={{width: '50px', height: '45px'}}>{
                 daySinceLastDone > 0 ?
                     <button className="icon-checkmark check" onClick={props.onCheckTodo.bind(null, 'DONE', props.todo)}></button>
                     :

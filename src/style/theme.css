@@ -15,20 +15,25 @@
     --accent: #2196F3;
 }
 
+li {
+    background-color: var(--background-secondary);
+    transition: box-shadow 1s;
+}
+
 .todo-done {
-    background-color: #60c689;
+    box-shadow: inset -20px 0em 0em 0px #60c689;
 }
 
 .todo-missed {
-    background-color: #e91e63;
+    box-shadow: inset 20px 0em 0em 0px #e91e63;
 }
 
 .todo-today {
-    background-color: var(--accent);
+    box-shadow: inset 20px 0em 0em 0px var(--accent);
 }
 
 .todo-future {
-    background-color: var(--background-secondary);
+    box-shadow: inset 20px 0em 0em 0px var(--background-secondary);
 }
 
 .check {
