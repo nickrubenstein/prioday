@@ -45,7 +45,7 @@ const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void
                 <label htmlFor="text">Task Name</label>
                 <input type="text" id="text" value={todo.text} onChange={handleTextChange}/>
             </div>
-            <div>
+            <div className="checkmark">
                 <label htmlFor="repeat">Repeat Forever</label>
                 <label className="switch">
                     <input type="checkbox" id="repeat" checked={todo.repeat} onChange={handleRepeatChange}/>

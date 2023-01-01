@@ -11,16 +11,6 @@ type TodosContextType = {
 };
 
 const sortTodos = (a: TodoModel, b: TodoModel) => {
-    if (a.lastDone === 0) {
-        if (b.lastDone !== 0) {
-            return -1;
-        }
-    }
-    else {
-        if (b.lastDone === 0) {
-            return 1;
-        }
-    }
     const aNext = next(a.lastDone, a.frequency).getTime();
     const bNext = next(b.lastDone, b.frequency).getTime();
     if (aNext === bNext) {

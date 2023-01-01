@@ -24,13 +24,13 @@ const DetailTodo: React.FC = () => {
 
     return <Fragment>
         <h1>
-            <NavLink to="/todo"><span className="icon-undo2"></span></NavLink>
+            <NavLink to="/todo"><span className="icon-undo2 margin-left"></span></NavLink>
             Edit Task
-            <span className="icon-bin" onClick={deleteHandler}></span>
+            <span className="icon-bin margin-right" onClick={deleteHandler}></span>
         </h1>
         <section>
-            <div>{JSON.stringify(todo, null, 2)}</div>
             <FormTodo todo={todo} onSubmit={submitHandler} />
+            <div>{JSON.stringify(todo, null, 2)}</div>
         </section>
     </Fragment>;
 }

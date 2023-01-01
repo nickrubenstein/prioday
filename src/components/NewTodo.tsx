@@ -16,9 +16,9 @@ const NewTodo: React.FC = () => {
     return (
         <Fragment>
             <h1>
-                <NavLink to="/todo"><span className="icon-undo2"></span></NavLink>
+                <NavLink to="/todo"><span className="icon-undo2 margin-left"></span></NavLink>
                 Create New Task
-                <span></span>
+                <span className="icon-dummy margin-right"></span>
             </h1>
             <section>
                 <FormTodo onSubmit={submitHandler}/>

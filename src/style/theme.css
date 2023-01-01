@@ -1,0 +1,36 @@
+
+:root {
+    --background: white;
+    --background-secondary: #dddddd;
+    --text-primary: black;
+    --text-secondary: #444444;
+    --accent: #2196F3;
+}
+
+[data-theme='dark'] {
+    --background: black;
+    --background-secondary: #444444;
+    --text-primary: white;
+    --text-secondary: grey;
+    --accent: #2196F3;
+}
+
+.todo-done {
+    background-color: #60c689;
+}
+
+.todo-missed {
+    background-color: #e91e63;
+}
+
+.todo-today {
+    background-color: var(--accent);
+}
+
+.todo-future {
+    background-color: var(--background-secondary);
+}
+
+.check {
+    color: #60c689;
+}

@@ -1,9 +1,4 @@
-html {
-    height: 100%;
-}
-
 body {
-    height: 100%;
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
         'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -12,10 +7,19 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
+html,
+body,
+#root,
+#app {
     height: 100%;
+}
+
+#app {
     display: flex;
     flex-direction: column;
+    color: var(--text-primary);
+    background-color: var(--background);
+    transition: background 0.4s;
 }
 
 section {
@@ -29,7 +33,7 @@ nav {
     justify-content: space-around;
     flex-wrap: wrap;
     align-content: center;
-    background-color: darkgrey;
+    background-color: var(--background-secondary);
 }
 
 /* Small screen nav flips to the bottom */
@@ -42,96 +46,108 @@ nav {
 h1 {
     display: flex;
     justify-content: space-between;
-    margin: 0.5rem 2rem;
+    font-size: 1.5rem;
+    margin: 0;
+    padding: 0.25rem 0;
     text-align: center;
+    border-bottom: 2px solid var(--background-secondary);
 }
 
 a {
     color: inherit;
-    text-decoration: auto;
+    text-decoration: none;
+}
+
+.margin-left {
+    margin-left: 1rem;
+}
+
+.margin-right {
+    margin-right: 1rem;
+}
+
+.icon-dummy {
+    width: 24px;
 }
 
 ul {
     list-style: none;
-    margin: 2rem auto;
+    margin: 0 auto;
     padding: 0;
     max-width: 40rem;
 }
 
 li {
     display: flex;
-    margin: 1rem 0;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-    padding: 1rem;
-    background-color: #f7f5ef;
-}
-
-.todo-done {
-    background-color: lightgreen;
-}
-.todo-missed {
-    background-color: salmon;    
-}
-.todo-today {
-    background-color: lightyellow;
-}
-.todo-future {
-    background-color: lightgrey;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border-radius: 10px;
 }
 
 form {
     max-width: 40rem;
-    margin: 2rem auto;
+    margin: 0 auto;
 
 }
 
-form>div {
+form > div {
     display: flex;
     flex-direction: column;
 }
 
-form label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
+form > div.checkmark {
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
 }
 
-form input {
+label {
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+input {
     display: block;
     width: 100%;
     font: inherit;
     font-size: 1.5rem;
     padding: 0.5rem;
-    border-radius: 4px;
-    background-color: #f7f5ef;
+    border-radius: 10px;
+    color: var(--text-primary);
+    background-color: var(--background-secondary);
     border: none;
-    border-bottom: 2px solid #494844;
+    outline: none;
+    border-bottom: 2px solid var(--accent);
     border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+    /* border-bottom-left-radius: 0; */
+    border-top-left-radius: 0;
     margin-bottom: 0.5rem;
     box-sizing: border-box;
+    transition: border 0.25s;
 }
 
-button.check {
-    font-size: 2rem;
-    border-radius: 15px;
+input:focus {
+    border-bottom: 2px solid var(--text-primary);
+}
+
+button {
+    color: var(--text-primary);
+    background-color: var(--background-secondary);
+    font-size: 1.25rem;
     border: none;
-    color: lightgreen;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 1rem;
     cursor: pointer;
+    opacity: 75%;
+    transition: opacity 0.25s;
 }
 
-form button {
-    font: inherit;
-    background-color: #ebb002;
-    border: 1px solid #ebb002;
-    color: #201d0f;
-    padding: 0.5rem 1.5rem;
-    border-radius: 4px;
-    cursor: pointer;
+.check {
+    font-size: 2rem;
+    padding: 0.5rem;
 }
 
 button:hover,
 button:active {
-    opacity: 60%;
+    opacity: 100%;
 }
