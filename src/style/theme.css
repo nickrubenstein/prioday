@@ -5,6 +5,9 @@
     --text-primary: white;
     --text-secondary: grey;
     --accent: #2196F3;
+
+    --done: #60c689;
+    --miss: #e91e63;
 }
 
 [data-theme='light'] {
@@ -21,11 +24,11 @@ li {
 }
 
 .todo-done {
-    box-shadow: inset -20px 0em 0em 0px #60c689;
+    box-shadow: inset -20px 0em 0em 0px var(--done);
 }
 
 .todo-missed {
-    box-shadow: inset 20px 0em 0em 0px #e91e63;
+    box-shadow: inset 20px 0em 0em 0px var(--miss);
 }
 
 .todo-today {
@@ -33,9 +36,21 @@ li {
 }
 
 .todo-future {
-    box-shadow: inset 20px 0em 0em 0px var(--background-secondary);
+    box-shadow: inset -20px 0em 0em 0px var(--background-secondary);
 }
 
-.check {
-    color: #60c689;
+.check-done {
+    color: var(--done);
+}
+
+.check-missed {
+    color: var(--miss);
+}
+
+.check-today {
+    color: var(--accent);
+}
+
+.check-future {
+    color: var(--text-primary);
 }

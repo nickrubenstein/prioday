@@ -1,43 +1,47 @@
-
-
+import * as Dates from "./dates";
 
 export const next = (lastDone: number, frequency: string) => {
-    const last = lastDone > 0 ? new Date(lastDone) : new Date();
-    let next = null;
-    let unit = frequency[0];
-    frequency = frequency.substring(1);
-    if (unit === 'd') {
-        next = last.setDate(last.getDate() + +frequency);
+    const date = lastDone > 0 ? Dates.getDate(lastDone) : Dates.getDate();
+    const unit = frequency[0];
+    const count = +frequency.substring(1);
+    switch (unit) {
+        case 'd': {
+            date.setDate(date.getDate() + count); break;
+        }
+        case 'w': {
+            date.setDate(date.getDate() + (7 * count)); break;
+        }
+        case 'm': {
+            date.setMonth(date.getMonth() + count); break;
+        }
+        case 'y': {
+            date.setFullYear(date.getFullYear() + count); break;
+        }
     }
-    if (unit === 'w') {
-        next = last.setDate(last.getDate() + (7 * +frequency));
-    }
-    if (unit === 'm') {
-        next = last.setMonth(last.getMonth() + +frequency);
-    }
-    if (!next) {
-        return new Date();
-    }
-    return new Date(next);
+    return date;
 };
 
-const order = ['m','w','d'];
+const order = ['y','m','w','d'];
 
-export const sortFrequencies = (a: string, b: string) => {
+export const sort = (a: string, b: string) => {
     if (a === b) {
         return 0;
     }
+    const aUnit = a[0];
+    const bUnit = b[0];
+    const aCount = +a.substring(1);
+    const bCount = +b.substring(1);
     for (let o in order) {
-        if (a[0] === o) {
-            if (b[0] === o) {
-                return +a.substring(1) - +b.substring(1);
+        if (aUnit === o) {
+            if (bUnit === o) {
+                return aCount - bCount;
             }
             else {
-                return 1;
+                return -1;
             }
         }
-        if (b[0] === o) {
-            return -1;
+        else if (bUnit === o) {
+            return 1;
         }
     }
     return 0;

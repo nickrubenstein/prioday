@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TodoModel from "../models/todo";
-import { next, sortFrequencies } from "../util/frequency";
+import * as Frequency from "../util/frequency";
 
 type TodosContextType = {
     todos: TodoModel[];
@@ -12,10 +12,20 @@ type TodosContextType = {
 };
 
 const sortTodos = (a: TodoModel, b: TodoModel) => {
-    const aNext = next(a.lastDone, a.frequency).getTime();
-    const bNext = next(b.lastDone, b.frequency).getTime();
+    if (a.lastDone === 0) {
+        if (b.lastDone !== 0) {
+            return -1;
+        }
+    }
+    else {
+        if (b.lastDone === 0) {
+            return 1;
+        }
+    }
+    const aNext = Frequency.next(a.lastDone, a.frequency).getTime();
+    const bNext = Frequency.next(b.lastDone, b.frequency).getTime();
     if (aNext === bNext) {
-        return sortFrequencies(a.frequency, b.frequency);
+        return Frequency.sort(a.frequency, b.frequency);
     }
     return aNext - bNext;
 };

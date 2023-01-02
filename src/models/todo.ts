@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 class TodoModel {
     id: string;
     text: string;
@@ -16,7 +18,7 @@ class TodoModel {
             this.lastDone = todo?.lastDone;
         }
         else {
-            this.id = new Date().toISOString();
+            this.id = uuid();
             this.text = "";
             this.repeat = true;
             this.frequency = "d1";
