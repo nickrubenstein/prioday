@@ -4,6 +4,7 @@ import { next, sortFrequencies } from "../util/frequency";
 
 type TodosContextType = {
     todos: TodoModel[];
+    sortTodos: () => void;
     addTodo: (todo: TodoModel) => void;
     deleteTodo: (todo: TodoModel) => void;
     replaceTodo: (todo: TodoModel) => void;
@@ -21,6 +22,7 @@ const sortTodos = (a: TodoModel, b: TodoModel) => {
 
 export const TodosContext = React.createContext<TodosContextType>({
     todos: [],
+    sortTodos: () => {},
     addTodo: (todo: TodoModel) => { },
     deleteTodo: (todo: TodoModel) => { },
     replaceTodo: (todo: TodoModel) => {},
@@ -41,22 +43,29 @@ const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => 
         localStorage.setItem("todos", JSON.stringify(todos));
     }, [todos]);
 
+    const sortTodosHandler = () => {
+        console.log("sort todos");
+        setTodos(prevTodos => {
+            return [...prevTodos.sort(sortTodos)];
+        });
+    };
+
     const addTodoHandler = (newTodo: TodoModel) => {
-        console.log("add todos");
+        console.log("add todo");
         setTodos(prevTodos => {
             return [newTodo, ...prevTodos];
         });
     };
 
     const deleteTodoHandler = (todo: TodoModel) => {
-        console.log("add todos");
+        console.log("add todo");
         setTodos((prevTodos) => {
             return prevTodos.filter(t => t.id !== todo.id);
         })
     };
 
     const replaceTodoHandler = (todo: TodoModel) => {
-        console.log("replace todos");
+        console.log("replace todo");
         setTodos(prevTodos => {
             const index = prevTodos.findIndex(t => t.id === todo.id);
             if (index >= 0) {
@@ -70,7 +79,7 @@ const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => 
     };
 
     const checkTodoHandler = (action: string, todo: TodoModel) => {
-        console.log("check todos");
+        console.log("check todo");
         if (action === 'DONE') {
             console.log(todo);
             if (todo.repeat) {
@@ -96,6 +105,7 @@ const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => 
 
     const contextValue: TodosContextType = {
         todos: todos,
+        sortTodos: sortTodosHandler,
         addTodo: addTodoHandler,
         deleteTodo: deleteTodoHandler,
         replaceTodo: replaceTodoHandler,
