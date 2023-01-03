@@ -1,33 +1,15 @@
 import React, { useEffect, useState } from "react";
-import TodoModel from "../models/todo";
-import * as Frequency from "../util/frequency";
+import TodoModel, { sortTodoModels } from "../models/todo";
+import * as Dates from "../util/dates";
 
 type TodosContextType = {
     todos: TodoModel[];
     sortTodos: () => void;
     addTodo: (todo: TodoModel) => void;
     deleteTodo: (todo: TodoModel) => void;
+    undoTodo: (todo: TodoModel) => void;
     replaceTodo: (todo: TodoModel) => void;
     checkTodo: (action: string, todo: TodoModel) => void;
-};
-
-const sortTodos = (a: TodoModel, b: TodoModel) => {
-    if (a.lastDone === 0) {
-        if (b.lastDone !== 0) {
-            return -1;
-        }
-    }
-    else {
-        if (b.lastDone === 0) {
-            return 1;
-        }
-    }
-    const aNext = Frequency.next(a.lastDone, a.frequency).getTime();
-    const bNext = Frequency.next(b.lastDone, b.frequency).getTime();
-    if (aNext === bNext) {
-        return Frequency.sort(a.frequency, b.frequency);
-    }
-    return aNext - bNext;
 };
 
 export const TodosContext = React.createContext<TodosContextType>({
@@ -35,6 +17,7 @@ export const TodosContext = React.createContext<TodosContextType>({
     sortTodos: () => {},
     addTodo: (todo: TodoModel) => { },
     deleteTodo: (todo: TodoModel) => { },
+    undoTodo: (todo: TodoModel) => { },
     replaceTodo: (todo: TodoModel) => {},
     checkTodo: (action: string, todo: TodoModel) => { }
 });
@@ -43,39 +26,38 @@ const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => 
     const [todos, setTodos] = useState<TodoModel[]>(() => {
         const storage = localStorage.getItem("todos");
         const storageTodos = storage ? JSON.parse(storage) : [];
-        storageTodos.sort(sortTodos);
-        console.log("getting todos");
+        storageTodos.sort(sortTodoModels);
         return storageTodos;
     });
 
     useEffect(() => {
-        console.log("storing todos");
         localStorage.setItem("todos", JSON.stringify(todos));
     }, [todos]);
 
     const sortTodosHandler = () => {
-        console.log("sort todos");
-        setTodos(prevTodos => {
-            return [...prevTodos.sort(sortTodos)];
-        });
+        setTodos(prevTodos => [...prevTodos.sort(sortTodoModels)]);
     };
 
     const addTodoHandler = (newTodo: TodoModel) => {
-        console.log("add todo");
-        setTodos(prevTodos => {
-            return [newTodo, ...prevTodos];
-        });
+        setTodos(prevTodos => [newTodo, ...prevTodos]);
+    };
+
+    const undoTodoHandler = (todo: TodoModel) => {
+        todo.lastDone =  todo.lastLastDone;
+        if (todo.repeat) {
+            todo.count--;
+        }
+        else {
+            todo.count++;
+        }
+        setTodos(prevTodos => [...prevTodos]);
     };
 
     const deleteTodoHandler = (todo: TodoModel) => {
-        console.log("add todo");
-        setTodos((prevTodos) => {
-            return prevTodos.filter(t => t.id !== todo.id);
-        })
+        setTodos(prevTodos => prevTodos.filter(t => t.id !== todo.id));
     };
 
     const replaceTodoHandler = (todo: TodoModel) => {
-        console.log("replace todo");
         setTodos(prevTodos => {
             const index = prevTodos.findIndex(t => t.id === todo.id);
             if (index >= 0) {
@@ -89,28 +71,24 @@ const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => 
     };
 
     const checkTodoHandler = (action: string, todo: TodoModel) => {
-        console.log("check todo");
         if (action === 'DONE') {
-            console.log(todo);
+            todo.lastLastDone = todo.lastDone;
             if (todo.repeat) {
                 todo.count++;
-                todo.lastDone = Date.now();
-                setTodos((prevTodos) => [...prevTodos]);
+                todo.lastDone = Dates.getDate().getTime();
+                setTodos(prevTodos => [...prevTodos]);
             }
             else {
                 todo.count--;
-                todo.lastDone = Date.now();
+                todo.lastDone = Dates.getDate().getTime();
                 if (todo.count < 0) {
-                    setTodos((prevTodos) => {
-                        return prevTodos.filter(t => t.id !== todo.id);
-                    })
+                    setTodos(prevTodos => prevTodos.filter(t => t.id !== todo.id));
                 }
                 else {
-                    setTodos((prevTodos) => [...prevTodos]);
+                    setTodos(prevTodos => [...prevTodos]);
                 }
             }
         }
-        
     };
 
     const contextValue: TodosContextType = {
@@ -118,6 +96,7 @@ const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => 
         sortTodos: sortTodosHandler,
         addTodo: addTodoHandler,
         deleteTodo: deleteTodoHandler,
+        undoTodo: undoTodoHandler,
         replaceTodo: replaceTodoHandler,
         checkTodo: checkTodoHandler
     };
