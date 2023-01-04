@@ -1,5 +1,6 @@
 import { Fragment, useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { TodosContext } from "../store/todos-context";
 import Todo from "./Todo";
 
@@ -18,13 +19,14 @@ const Todos: React.FC = () => {
                 <NavLink to="/new"><span className="icon-plus margin-right"></span></NavLink>
             </h1>
             <section>
-                <ul>
-                    {todosCtx.todos.map(todo => (
-                        <Todo key={todo.id} todo={todo} onCheckTodo={todosCtx.checkTodo} />
-                    ))
-                }
+                <TransitionGroup component='ul' classNames="todo-list">
+                    {todosCtx.todos.map(todo => 
+                        <CSSTransition key={todo.id} in={true} appear={true} classNames="todo-item" timeout={500}>
+                            <Todo todo={todo} onCheckTodo={todosCtx.checkTodo} />
+                        </CSSTransition>
+                    )}
+                </TransitionGroup>
                 { todosCtx.todos.length === 0 ? 'Add a task by selecting the plus in the top right' : '' }
-                </ul>
             </section>
         </Fragment>
     );

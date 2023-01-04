@@ -1,0 +1,55 @@
+.todo-today.todo-item-appear {
+    opacity: 0;
+    transform: translateY(-25px);
+}
+
+.todo-today.todo-item-appear-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+.todo-done.todo-item-appear {
+    opacity: 0;
+}
+
+.todo-done.todo-item-appear-active {
+    opacity: 1;
+    transition: opacity 500ms ease-out;
+}
+
+.todo-missed.todo-item-appear {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+.todo-missed.todo-item-appear-active {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+.todo-future.todo-item-appear {
+    opacity: 0;
+    transform: translateY(25px);
+}
+
+.todo-future.todo-item-appear-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+.todo-item-exit {
+    opacity: 1;
+}
+
+.todo-item-exit-active {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: opacity 500ms ease-in, transform 500ms ease-out;
+}
+
+.todo-done {
+    transition: transform 500ms ease-out;
+}
