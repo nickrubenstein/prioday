@@ -30,34 +30,34 @@ const Todo: React.FC<{ todo: TodoModel; onCheckTodo: (action: string, todo: Todo
     }
 
     return <li className={"todo-" + status}>
-            <NavLink to={props.todo.id} style={{ flex: "auto", marginRight: "0.5rem" }} >
-                <div style={{ fontWeight: "bold", overflowWrap: "anywhere" }}>
-                    {props.todo.text}
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", flexFlow: "wrap" }}>
-                    <span style={{ width: '90px' }}>{isNew ? "Today" : lastDoneDisplay}</span>
-                    <span style={{ width: '150px' }}>{statusDisplay}</span>
-                    <span style={{ width: '90px' }}>{isNew ? "New" : nextDoneDisplay}</span>
-                </div>
-            </NavLink>
-            <div style={{ width: "50px", height: "45px", alignSelf: "center" }}>
+        <NavLink to={props.todo.id} style={{ flex: "auto", marginRight: "0.5rem" }} >
+            <div style={{ fontWeight: "bold", overflowWrap: "anywhere" }}>
+                {props.todo.text}
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", flexFlow: "wrap" }}>
+                <span style={{ width: '90px' }}>{isNew ? "Today" : lastDoneDisplay}</span>
+                <span style={{ width: '150px' }}>{statusDisplay}</span>
+                <span style={{ width: '90px' }}>{isNew ? "New" : nextDoneDisplay}</span>
+            </div>
+        </NavLink>
+        <div style={{ width: "50px", height: "45px", alignSelf: "center" }}>
                 { daySinceLastDone > 0 ?
-                    <button
-                        className={"icon-checkmark2 check-" + status}
-                        style={{ fontSize: "2rem", padding: "0.5rem" }}
-                        onClick={props.onCheckTodo.bind(null, 'DONE', props.todo)}>
-                    </button>
-                    :
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                        <span style={{ whiteSpace: "nowrap" }}>
-                            {daysToNextDone + (daysToNextDone === 1 ? " day" : " days")}
-                        </span>
-                        <span style={{ whiteSpace: "nowrap" }}>
-                            {props.todo.repeat ? props.todo.frequency : (props.todo.count + " left")}
-                        </span>
-                    </div>
+                <button
+                    className={"icon-checkmark2 check-" + status}
+                    style={{ fontSize: "2rem", padding: "0.5rem" }}
+                    onClick={props.onCheckTodo.bind(null, 'DONE', props.todo)}>
+                </button>
+                :
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <span style={{ whiteSpace: "nowrap" }}>
+                        {daysToNextDone + (daysToNextDone === 1 ? " day" : " days")}
+                    </span>
+                    <span style={{ whiteSpace: "nowrap" }}>
+                        {props.todo.repeat ? props.todo.frequency : (props.todo.count + " left")}
+                    </span>
+                </div>
             }</div>
-        </li>;
+    </li>;
 }
 
 export default Todo;

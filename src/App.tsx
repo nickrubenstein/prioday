@@ -15,12 +15,13 @@ const App = () => {
         const storedTheme = localStorage.getItem("theme") || (defaultDark ? 'dark' : 'light');
         return storedTheme;
     });
+    
     const onTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light';
         setTheme(newTheme);
     };
+
     useEffect(() => {
-        console.log("changing theme");
         localStorage.setItem("theme", theme);
     }, [theme]);
 
