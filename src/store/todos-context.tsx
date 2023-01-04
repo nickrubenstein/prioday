@@ -25,9 +25,16 @@ export const TodosContext = React.createContext<TodosContextType>({
 const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => {
     const [todos, setTodos] = useState<TodoModel[]>(() => {
         const storage = localStorage.getItem("todos");
-        const storageTodos = storage ? JSON.parse(storage) : [];
-        storageTodos.sort(sortTodoModels);
-        return storageTodos;
+        try {
+            const storageTodos = storage ? JSON.parse(storage) : [];
+            storageTodos.sort(sortTodoModels);
+            return storageTodos;
+        }
+        catch (error) {
+            console.error("VVV Error reading local storage VVV");
+            console.error(error);
+        }
+        return [];
     });
 
     useEffect(() => {
