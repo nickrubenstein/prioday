@@ -54,3 +54,14 @@ li {
 .check-future {
     color: var(--text-primary);
 }
+
+.todo-item-appear {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.todo-item-appear-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 500ms ease-out, transform 500ms ease-out;
+}

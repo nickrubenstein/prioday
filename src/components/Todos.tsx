@@ -1,7 +1,6 @@
 import { Fragment, useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Flipper, Flipped } from "react-flip-toolkit";
-import { CSSTransition } from "react-transition-group";
 import { TodosContext } from "../store/todos-context";
 import TodoModel from "../models/todo";
 import Todo from "./Todo";
@@ -9,7 +8,7 @@ import Todo from "./Todo";
 const Todos: React.FC = () => {
     const todosCtx = useContext(TodosContext);
     const [flipKey, setFlipKey] = useState(true);
-
+    
     const sortHandler = () => {
         todosCtx.sortTodos();
         setFlipKey(!flipKey);
@@ -29,12 +28,10 @@ const Todos: React.FC = () => {
         </h1>
         <section>
             <Flipper element="ul" flipKey={flipKey} spring="veryGentle">
-                {todosCtx.todos.map(todo =>
+                {todosCtx.todos.map((todo, index) =>
                     <Flipped flipId={todo.id} key={todo.id}>
                         <div className="flipped-item">
-                            <CSSTransition in={true} appear={true} classNames="todo-item" timeout={500}>
-                                <Todo todo={todo} onCheckTodo={checkHandler} />
-                            </CSSTransition>
+                            <Todo todo={todo} index={index} onCheckTodo={checkHandler} />
                         </div>
                     </Flipped>
                 )}

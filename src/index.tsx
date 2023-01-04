@@ -4,7 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 import './style/index.css';
 import './style/theme.css';
 import './style/switch.css';
-import './style/transition.css';
 import './style/icomoon/style.css';
 import App from './App';
 import TodosContextProvider from './store/todos-context';
