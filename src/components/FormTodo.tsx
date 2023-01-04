@@ -3,40 +3,32 @@ import TodoModel from "../models/todo";
 
 const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void }> = (props) => {
     const isNew = !props.todo;
-    const [todo, setTodo] = useState(props.todo || new TodoModel());
+    const [todo, setTodo] = useState(new TodoModel(props.todo));
 
     const submitHandler = (event: React.FormEvent) => {
         event.preventDefault();
         props.onSubmit(todo);
     };
 
-    const handleChange = (formKey: string, value: any) => {
-        let t: any = new TodoModel(todo);
-        if (t[formKey] === value) {
-            return;
-        }
-        t[formKey] = value;
-        setTodo(t);
-    };
-
     const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-        handleChange('text', value);
-    };
-
-    const handleFrequencyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-        handleChange('frequency', value);
+        todo.text = event.target.value;
+        setTodo(new TodoModel(todo));
     };
 
     const handleRepeatChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.checked;
-        handleChange('repeat', value);
+        todo.repeat = event.target.checked;
+        todo.count = todo.repeat ? 0 : 1;
+        setTodo(new TodoModel(todo));
+    };
+
+    const handleFrequencyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        todo.frequency = event.target.value;
+        setTodo(new TodoModel(todo));
     };
 
     const handleCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-        handleChange('count', value);
+        todo.count = +event.target.value;
+        setTodo(new TodoModel(todo));
     };
 
     return (

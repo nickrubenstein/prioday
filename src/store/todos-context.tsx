@@ -81,7 +81,7 @@ const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => 
             else {
                 todo.count--;
                 todo.lastDone = Dates.getDate().getTime();
-                if (todo.count < 0) {
+                if (todo.count <= 0) {
                     setTodos(prevTodos => prevTodos.filter(t => t.id !== todo.id));
                 }
                 else {
