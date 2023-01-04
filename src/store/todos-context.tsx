@@ -50,7 +50,7 @@ const TodosContextProvider: React.FC<{children?: React.ReactNode}> = (props) => 
         else {
             todo.count++;
         }
-        setTodos(prevTodos => [...prevTodos]);
+        setTodos(prevTodos => [...prevTodos.sort(sortTodoModels)]);
     };
 
     const deleteTodoHandler = (todo: TodoModel) => {

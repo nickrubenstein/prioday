@@ -22,12 +22,12 @@ const DetailTodo: React.FC = () => {
         todosCtx.replaceTodo(todo);
     };
 
-    const deleteHandler = (event: React.MouseEvent) => {
+    const deleteHandler = () => {
         todosCtx.deleteTodo(todo);
         navigate("/todo");
     };
 
-    const undoHandler = (event: React.MouseEvent) => {
+    const undoHandler = () => {
         todosCtx.undoTodo(todo);
     };
 
