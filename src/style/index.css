@@ -145,3 +145,27 @@ button:hover,
 button:active {
     opacity: 100%;
 }
+
+.frequency-unit {
+    display: flex;
+    justify-content: flex-start;
+    margin: 0.5rem 0;
+}
+
+.frequency-unit-item {
+    padding: 1rem;
+    background-color: var(--background-secondary);
+    border: 1px solid var(--background);
+    border-radius: 10px;
+    cursor: pointer;
+    opacity: 75%;
+}
+
+.frequency-unit-item:hover,
+.frequency-unit-item:active {
+    opacity: 100%;
+}
+
+.frequency-unit-item.selected {
+    background-color: var(--accent);
+}

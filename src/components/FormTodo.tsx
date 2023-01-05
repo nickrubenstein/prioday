@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import TodoModel from "../models/todo";
+import Frequency from "./Frequency";
 
 const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void }> = (props) => {
     const isNew = !props.todo;
@@ -21,8 +22,8 @@ const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void
         setTodo(new TodoModel(todo));
     };
 
-    const handleFrequencyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        todo.frequency = event.target.value;
+    const handleFrequencyChange = (frequency: string) => {
+        todo.frequency = frequency;
         setTodo(new TodoModel(todo));
     };
 
@@ -46,14 +47,11 @@ const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void
             </div>
             { todo.repeat
                 ? 
-                <div>
-                    <label htmlFor="frequency">Frequency</label>
-                    <input type="frequency" id="frequency" value={todo.frequency} onChange={handleFrequencyChange}/>
-                </div>
+                <Frequency frequency={todo.frequency} onChange={handleFrequencyChange}></Frequency>
                 : 
                 <div>
-                    <label htmlFor="count">Repeat Count</label>
-                    <input type="number" id="count" value={todo.count} onChange={handleCountChange}/>
+                    <label htmlFor="count">Do {todo.count} Time{todo.count === 1 ? '' : 's'}</label>
+                    <input type="number" id="count" min="1" value={todo.count} onChange={handleCountChange}/>
                 </div>
             }
 
