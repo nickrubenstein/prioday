@@ -14,7 +14,7 @@ const Frequency: React.FC<{ frequency: string, onChange: (frequency: string) => 
     useEffect(() => {
         const frequency = selectedUnit.value + selectedCount;
         props.onChange(frequency);
-    }, [selectedUnit, selectedCount]);
+    }, [props, selectedUnit, selectedCount]);
     
     const handleUnitChange = (unit: { value: string, display: string }) => {
         setSelectedUnit(unit);
