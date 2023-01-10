@@ -1,8 +1,8 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Flipper, Flipped } from "react-flip-toolkit";
 import { TodosContext } from "../store/todos-context";
-import TodoModel, { sortTodoModels } from "../models/todo";
+import TodoModel from "../models/todo";
 import Todo from "./Todo";
 
 const Todos: React.FC = () => {

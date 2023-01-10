@@ -71,7 +71,7 @@ const AuthForm = () => {
     }
 
     return <Fragment>
-        <div style={{textAlign: 'center', color: response?.status === 'error' ? 'red' : 'green'}}>{response?.text}</div>
+        <div style={{textAlign: 'center', color: response?.status === 'error' ? 'var(--miss)' : 'var(--done)'}}>{response?.text}</div>
         { authCtx.isLoggedIn ? 
             <Fragment>
                 <form onSubmit={logoutHandler}>
