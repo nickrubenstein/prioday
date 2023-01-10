@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { NavLink } from "react-router-dom";
+import Account from "./Account";
 
 const Settings: React.FC<{ theme: string, onTheme: () => void }> = (props) => {
     const isDark = props.theme === 'dark';
@@ -11,6 +12,7 @@ const Settings: React.FC<{ theme: string, onTheme: () => void }> = (props) => {
             <span className="icon-dummy margin-right"></span>
         </h1>
         <section>
+            <h1>Device</h1>
             <form>
                 <div className="checkmark">
                     <label htmlFor="repeat">{isDark ? "Dark" : "Light"} Theme</label>
@@ -20,6 +22,7 @@ const Settings: React.FC<{ theme: string, onTheme: () => void }> = (props) => {
                     </label>
                 </div>
             </form>
+            <Account></Account>
         </section>
     </Fragment>;
 }

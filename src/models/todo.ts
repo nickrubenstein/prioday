@@ -9,6 +9,7 @@ class TodoModel {
     count: number;
     lastDone: number;
     lastLastDone: number;
+    source: string;
 
     constructor(todo?: TodoModel) {
         if (todo) {
@@ -19,15 +20,17 @@ class TodoModel {
             this.count = todo.count;
             this.lastDone = todo.lastDone;
             this.lastLastDone = todo.lastLastDone;
+            this.source = todo.source;
         }
         else {
             this.id = uuid();
-            this.text = "";
+            this.text = '';
             this.repeat = true;
-            this.frequency = "d1";
+            this.frequency = 'd1';
             this.count = 0;
             this.lastDone = 0;
             this.lastLastDone = 0;
+            this.source = 'Device';
         }
     }
 }

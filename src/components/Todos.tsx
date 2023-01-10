@@ -1,22 +1,20 @@
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Flipper, Flipped } from "react-flip-toolkit";
 import { TodosContext } from "../store/todos-context";
-import TodoModel from "../models/todo";
+import TodoModel, { sortTodoModels } from "../models/todo";
 import Todo from "./Todo";
 
 const Todos: React.FC = () => {
-    const todosCtx = useContext(TodosContext);
+    const { todos, checkTodo } = useContext(TodosContext);
     const [flipKey, setFlipKey] = useState(true);
     
     const sortHandler = () => {
-        todosCtx.sortTodos();
-        setFlipKey(!flipKey);
+        
     };
 
     const checkHandler = (action: string, todo: TodoModel) => {
-        todosCtx.checkTodo(action, todo);
-        todosCtx.sortTodos();
+        checkTodo(action, todo);
         setFlipKey(!flipKey);
     };
 
@@ -28,7 +26,7 @@ const Todos: React.FC = () => {
         </h1>
         <section>
             <Flipper element="ul" flipKey={flipKey} spring="veryGentle">
-                {todosCtx.todos.map((todo, index) =>
+                {todos.map((todo, index) =>
                     <Flipped flipId={todo.id} key={todo.id}>
                         <div className="flipped-item">
                             <Todo todo={todo} index={index} onCheckTodo={checkHandler} />
@@ -36,7 +34,7 @@ const Todos: React.FC = () => {
                     </Flipped>
                 )}
             </Flipper>
-            {todosCtx.todos.length === 0 ? 'Add a task by selecting the plus in the top right' : ''}
+            {todos.length === 0 ? 'Add a task by selecting the plus in the top right' : ''}
         </section>
     </Fragment>;
 }

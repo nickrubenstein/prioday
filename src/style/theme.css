@@ -65,3 +65,17 @@ li {
     transform: translateY(0);
     transition: opacity 500ms ease-out, transform 500ms ease-out;
 }
+
+.spinner {
+    border: 0.35rem solid var(--text-primary);
+    border-top: 0.35rem solid var(--accent);
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
