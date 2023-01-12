@@ -36,7 +36,7 @@ const CloudContextProvider: React.FC<{children?: React.ReactNode}> = (props) => 
         setCloudSub(sub);
         // console.log("getting cloud todos");
         const snapshot = await get(ref(db, 'users/' + uid + '/todos'));
-        setTodos(snapshot.val());
+        setTodos(snapshot.val() || []);
     };
     
     const unsubCloudTodos = () => {

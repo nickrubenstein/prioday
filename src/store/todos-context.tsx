@@ -68,18 +68,15 @@ const TodosContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =
 
     const replaceTodoHandler = (todo: TodoModel) => {
         if (todo.source === 'Device') {
-            setDeviceTodos(prevTodos => {
-                const index = prevTodos.findIndex(t => t.id === todo.id);
-                if (index >= 0) {
-                    prevTodos.splice(index, 1, todo);
-                    return [...prevTodos];
-                }
-                else {
-                    console.error("Could not find todo id to replace in todos device context vvv");
-                    console.error(todo);
-                }
-                return prevTodos;
-            });
+            const index = deviceTodos.findIndex(t => t.id === todo.id);
+            if (index >= 0) {
+                deviceTodos.splice(index, 1, todo);
+                setDeviceTodos([...deviceTodos]);
+            }
+            else {
+                setCloudTodos(cloudTodos.filter(t => t.id !== todo.id));
+                addTodoHandler(todo);
+            }
         }
         else {
             const index = cloudTodos.findIndex(t => t.id === todo.id);
@@ -88,8 +85,8 @@ const TodosContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =
                 setCloudTodos([...cloudTodos]);
             }
             else {
-                console.error("Could not find todo id to replace in todos cloud context vvv");
-                console.error(todo);
+                setDeviceTodos(prevTodos => prevTodos.filter(t => t.id !== todo.id));
+                addTodoHandler(todo);
             }
         }
     };
