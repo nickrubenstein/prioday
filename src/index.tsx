@@ -21,7 +21,13 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 getDatabase(app);
-getPerformance(app);
+console.log("process.env.NODE_ENV");
+console.log(process.env.NODE_ENV);
+console.log("process.env.GENERATE_SOURCEMAP");
+console.log(process.env);
+if (process.env.NODE_ENV === 'production') {
+    getPerformance(app);
+}
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
