@@ -123,7 +123,7 @@ const TodosContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =
     };
 
     const getAllTodosSorted = () => {
-        console.log('sorting');
+        // console.log('sorting');
         return [...deviceTodos, ...cloudTodos].sort(sortTodoModels);
     };
 
