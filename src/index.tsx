@@ -21,10 +21,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 getDatabase(app);
-console.log("process.env.NODE_ENV");
-console.log(process.env.NODE_ENV);
-console.log("process.env.GENERATE_SOURCEMAP");
-console.log(process.env);
 if (process.env.NODE_ENV === 'production') {
     getPerformance(app);
 }
