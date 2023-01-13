@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
+import useCloud from "../hooks/useCloud";
 import TodoModel, { sortTodoModels } from "../models/todo";
 import * as Dates from "../util/dates";
 import * as Storage from "../util/storage";
-import { CloudContext } from "./cloud-context";
+import { AuthContext } from "./auth-context";
 
 type TodosContextType = {
     todos: TodoModel[];
@@ -23,12 +24,12 @@ export const TodosContext = React.createContext<TodosContextType>({
 });
 
 const TodosContextProvider: React.FC<{ children?: React.ReactNode }> = (props) => {
-    const { cloudTodos, setCloudTodos } = useContext(CloudContext);
+    const { uid } = useContext(AuthContext);
+    const todosDbPath = uid ? 'users/' + uid + '/todos' : undefined;
+    const [cloudTodos, setCloudTodos] = useCloud<TodoModel[]>([], todosDbPath);
     const [deviceTodos, setDeviceTodos] = useState<TodoModel[]>(Storage.getDeviceTodos());
 
     useEffect(() => {
-        // console.log("todo effect device changed VVV");
-        // console.log(deviceTodos);
         Storage.setDeviceTodos(deviceTodos);
     }, [deviceTodos]);
 
@@ -37,7 +38,7 @@ const TodosContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =
             setDeviceTodos(prevTodos => [newTodo, ...prevTodos]);
         }
         else {
-            setCloudTodos([newTodo, ...cloudTodos]);
+            setCloudTodos(prevTodos => [newTodo, ...prevTodos]);
         }
     };
 
@@ -53,7 +54,7 @@ const TodosContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =
             setDeviceTodos(prevTodos => [...prevTodos]);
         }
         else {
-            setCloudTodos([...cloudTodos]);
+            setCloudTodos(prevTodos => [...prevTodos]);
         }
     };
 
@@ -62,32 +63,40 @@ const TodosContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =
             setDeviceTodos(prevTodos => prevTodos.filter(t => t.id !== todo.id));
         }
         else {
-            setCloudTodos(cloudTodos.filter(t => t.id !== todo.id));
+            setCloudTodos(prevTodos => prevTodos.filter(t => t.id !== todo.id));
         }
     };
 
     const replaceTodoHandler = (todo: TodoModel) => {
         if (todo.source === 'Device') {
-            const index = deviceTodos.findIndex(t => t.id === todo.id);
-            if (index >= 0) {
-                deviceTodos.splice(index, 1, todo);
-                setDeviceTodos([...deviceTodos]);
-            }
-            else {
-                setCloudTodos(cloudTodos.filter(t => t.id !== todo.id));
-                addTodoHandler(todo);
-            }
+            setDeviceTodos(prevTodos => {
+                const index = prevTodos.findIndex(t => t.id === todo.id);
+                if (index >= 0) {
+                    console.log("found device");
+                    prevTodos.splice(index, 1, todo);
+                    return [...prevTodos];
+                }
+                else {
+                    console.log("not found device");
+                    setCloudTodos(prevTodos => prevTodos.filter(t => t.id !== todo.id));
+                    return [todo, ...prevTodos];
+                }
+            });
         }
         else {
-            const index = cloudTodos.findIndex(t => t.id === todo.id);
-            if (index >= 0) {
-                cloudTodos.splice(index, 1, todo);
-                setCloudTodos([...cloudTodos]);
-            }
-            else {
-                setDeviceTodos(prevTodos => prevTodos.filter(t => t.id !== todo.id));
-                addTodoHandler(todo);
-            }
+            setCloudTodos(prevTodos => {
+                const index = prevTodos.findIndex(t => t.id === todo.id);
+                if (index >= 0) {
+                    console.log("found cloud");
+                    prevTodos.splice(index, 1, todo);
+                    return [...prevTodos];
+                }
+                else {
+                    console.log("not found cloud");
+                    setDeviceTodos(prevTodos => prevTodos.filter(t => t.id !== todo.id));
+                    return [todo, ...prevTodos];
+                }
+            });
         }
     };
 
@@ -110,13 +119,13 @@ const TodosContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =
                 setDeviceTodos(prevTodos => [...prevTodos.sort(sortTodoModels)]);
             }
             else {
-                setCloudTodos([...cloudTodos.sort(sortTodoModels)]);
+                setCloudTodos(prevTodos => [...prevTodos.sort(sortTodoModels)]);
             }
         }
     };
 
     const getAllTodosSorted = () => {
-        // console.log('sorting');
+        console.log('sorting');
         return [...deviceTodos, ...cloudTodos].sort(sortTodoModels);
     };
 

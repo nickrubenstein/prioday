@@ -9,7 +9,6 @@ import './style/icomoon/style.css';
 import App from './App';
 import TodosContextProvider from './store/todos-context';
 import AuthContextProvider from './store/auth-context';
-import CloudContextProvider from './store/cloud-context';
 
 const firebaseConfig = {
     apiKey: "AIzaSyCD99byCgoNRifBwZppGPSCCm28XJpX6SI",
@@ -27,11 +26,9 @@ root.render(
     //<React.StrictMode>
         <BrowserRouter>
             <AuthContextProvider>
-                <CloudContextProvider>
-                    <TodosContextProvider>
-                        <App />
-                    </TodosContextProvider>
-                </CloudContextProvider>
+                <TodosContextProvider>
+                    <App />
+                </TodosContextProvider>
             </AuthContextProvider>
         </BrowserRouter>
     //</React.StrictMode>
