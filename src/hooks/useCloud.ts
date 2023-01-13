@@ -1,7 +1,7 @@
 import { getDatabase, onValue, ref, set } from "firebase/database";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-const useCloud = <S extends Object>(initialState: S, dbPath?: string): [S, Dispatch<SetStateAction<S>>] => {
+const useCloud = <S extends Object | string | number>(initialState: S, dbPath?: string): [S, Dispatch<SetStateAction<S>>] => {
     // const [cloudSub, setCloudSub] = useState<() => void>();
     const [state, setState] = useState<S>(initialState);
 
@@ -28,7 +28,7 @@ const useCloud = <S extends Object>(initialState: S, dbPath?: string): [S, Dispa
         // setCloudSub(sub);
     }, [dbPath, initialState]);
 
-    const setTodosHandler = (value: S | ((prevState: S) => S)) => {
+    const setStateHandler = (value: S | ((prevState: S) => S)) => {
         if (!dbPath) {
             setState(initialState);
             return;
@@ -39,7 +39,7 @@ const useCloud = <S extends Object>(initialState: S, dbPath?: string): [S, Dispa
         set(ref(db, dbPath), newValue);
     };
 
-    return [state, setTodosHandler];
+    return [state, setStateHandler];
 };
 
 export default useCloud;

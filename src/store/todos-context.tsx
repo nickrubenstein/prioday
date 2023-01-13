@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext } from "react";
 import useCloud from "../hooks/useCloud";
+import useStorage from "../hooks/useStorage";
 import TodoModel, { sortTodoModels } from "../models/todo";
 import * as Dates from "../util/dates";
-import * as Storage from "../util/storage";
 import { AuthContext } from "./auth-context";
 
 type TodosContextType = {
@@ -29,11 +29,7 @@ const TodosContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =
     const { uid } = useContext(AuthContext);
     const todosDbPath = uid ? 'users/' + uid + '/todos' : undefined;
     const [cloudTodos, setCloudTodos] = useCloud<TodoModel[]>(emptyList, todosDbPath);
-    const [deviceTodos, setDeviceTodos] = useState<TodoModel[]>(Storage.getDeviceTodos());
-
-    useEffect(() => {
-        Storage.setDeviceTodos(deviceTodos);
-    }, [deviceTodos]);
+    const [deviceTodos, setDeviceTodos] = useStorage<TodoModel[]>(emptyList, "todo");
 
     const addTodoHandler = (newTodo: TodoModel) => {
         if (newTodo.source === 'Device') {
@@ -128,7 +124,7 @@ const TodosContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =
 
     const getAllTodosSorted = () => {
         console.log('sorting');
-        return [...deviceTodos, ...(cloudTodos || [])].sort(sortTodoModels);
+        return [...deviceTodos, ...cloudTodos].sort(sortTodoModels);
     };
 
     const contextValue: TodosContextType = {
