@@ -26,7 +26,7 @@ const useCloud = <S extends Object>(initialState: S, dbPath?: string): [S, Dispa
             console.error(error);
         });
         // setCloudSub(sub);
-    }, [dbPath]);
+    }, [dbPath, initialState]);
 
     const setTodosHandler = (value: S | ((prevState: S) => S)) => {
         if (!dbPath) {
