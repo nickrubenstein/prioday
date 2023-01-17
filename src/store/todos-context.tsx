@@ -7,6 +7,7 @@ import { AuthContext } from "./auth-context";
 
 type TodosContextType = {
     todos: TodoModel[];
+    cloudStatus: "starting" | "connected" | "disconnected",
     addTodo: (todo: TodoModel) => void;
     deleteTodo: (todo: TodoModel) => void;
     undoTodo: (todo: TodoModel) => void;
@@ -16,6 +17,7 @@ type TodosContextType = {
 
 export const TodosContext = React.createContext<TodosContextType>({
     todos: [],
+    cloudStatus: "starting",
     addTodo: (todo: TodoModel) => { },
     deleteTodo: (todo: TodoModel) => { },
     undoTodo: (todo: TodoModel) => { },
@@ -124,11 +126,12 @@ const TodosContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =
 
     const getAllTodosSorted = () => {
         // console.log('sorting');
-        return [...deviceTodos, ...cloudTodos].sort(sortTodoModels);
+        return [...deviceTodos, ...cloudTodos.value].sort(sortTodoModels);
     };
 
     const contextValue: TodosContextType = {
         todos: getAllTodosSorted(),
+        cloudStatus: cloudTodos.status,
         addTodo: addTodoHandler,
         deleteTodo: deleteTodoHandler,
         undoTodo: undoTodoHandler,

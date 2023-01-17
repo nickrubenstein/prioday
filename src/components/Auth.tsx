@@ -89,7 +89,7 @@ const AuthForm = () => {
                         <input type='password' id='newpassword' minLength={6} required ref={newPasswordRef} autoComplete="new-password" />
                     </div>
                     { isWaiting ? 
-                        <div className='spinner'></div>
+                        <div className='icon-spinner spinner'></div>
                         :
                         <button type='submit'>Change Password</button>
                     } 
@@ -107,7 +107,7 @@ const AuthForm = () => {
                     <input type='password' id='password' minLength={6} required ref={passwordRef} autoComplete="current-password" />
                 </div>
                 { isWaiting ? 
-                    <div className='spinner'></div>
+                    <div className='icon-spinner spinner'></div>
                     :
                     <button type='submit'>Login</button>
                 } 
