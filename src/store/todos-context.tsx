@@ -7,7 +7,7 @@ import { AuthContext } from "./auth-context";
 
 type TodosContextType = {
     todos: TodoModel[];
-    cloudStatus: "starting" | "connected" | "disconnected",
+    todosProcessing: boolean,
     addTodo: (todo: TodoModel) => void;
     deleteTodo: (todo: TodoModel) => void;
     undoTodo: (todo: TodoModel) => void;
@@ -17,7 +17,7 @@ type TodosContextType = {
 
 export const TodosContext = React.createContext<TodosContextType>({
     todos: [],
-    cloudStatus: "starting",
+    todosProcessing: true,
     addTodo: (todo: TodoModel) => { },
     deleteTodo: (todo: TodoModel) => { },
     undoTodo: (todo: TodoModel) => { },
@@ -28,10 +28,11 @@ export const TodosContext = React.createContext<TodosContextType>({
 const emptyList: TodoModel[] = [];
 
 const TodosContextProvider: React.FC<{ children?: React.ReactNode }> = (props) => {
-    const { uid } = useContext(AuthContext);
+    const { uid, authProcessing } = useContext(AuthContext);
     const todosDbPath = uid ? 'users/' + uid + '/todos' : undefined;
     const [cloudTodos, setCloudTodos] = useCloud<TodoModel[]>(emptyList, todosDbPath);
     const [deviceTodos, setDeviceTodos] = useStorage<TodoModel[]>(emptyList, "todo");
+    const processing = authProcessing || cloudTodos.status === 'processing';
 
     const addTodoHandler = (newTodo: TodoModel) => {
         if (newTodo.source === 'Device') {
@@ -131,7 +132,7 @@ const TodosContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =
 
     const contextValue: TodosContextType = {
         todos: getAllTodosSorted(),
-        cloudStatus: cloudTodos.status,
+        todosProcessing: processing,
         addTodo: addTodoHandler,
         deleteTodo: deleteTodoHandler,
         undoTodo: undoTodoHandler,

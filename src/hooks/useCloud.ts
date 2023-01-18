@@ -5,13 +5,13 @@ type CloudValue = Object | Array<CloudValue> | string | number | boolean | null;
 
 type ClousState<V> = {
     value: V, 
-    status: 'starting' | 'connected' | 'disconnected'
+    status: 'processing' | 'connected' | 'disconnected'
 }
 
 const useCloud = <S extends CloudValue>(initialState: S, dbPath?: string): [ClousState<S>, Dispatch<SetStateAction<S>>] => {
     const [state, setState] = useState<ClousState<S>>({ 
         value: initialState, 
-        status: 'starting'
+        status: 'processing'
     });
 
     useEffect(() => {
@@ -23,7 +23,7 @@ const useCloud = <S extends CloudValue>(initialState: S, dbPath?: string): [Clou
             setState({ value: initialState, status: 'disconnected'});
             return;
         }
-        setState({ value: initialState, status: 'starting'});
+        setState({ value: initialState, status: 'processing'});
         const db = getDatabase();
         /*const sub = */onValue(ref(db, dbPath), 
         snapshot => {

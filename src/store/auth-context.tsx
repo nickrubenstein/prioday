@@ -2,20 +2,20 @@ import React, { createContext, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, updatePassword, User } from "firebase/auth";
 
 type AuthContextType = {
-    user?: User | null,
     uid?: string,
     email?: string | null,
-    isLoggedIn: boolean,
+    loggedIn: boolean,
+    authProcessing: boolean,
     login: (email: string, password: string) => Promise<string | null>,
     changePassword: (oldPassword: string, newPassword: string) => Promise<string | null>,
     logout: () => Promise<string | null>
 };
 
 export const AuthContext = createContext<AuthContextType>({
-    user: null,
     uid: '',
     email: '',
-    isLoggedIn: false,
+    loggedIn: false,
+    authProcessing: false,
     login: async (email: string, password: string) => null,
     changePassword: async (oldPassowrd: string, newPassword: string) => null,
     logout: async () => null,
@@ -23,22 +23,36 @@ export const AuthContext = createContext<AuthContextType>({
 
 const AuthContextProvider: React.FC<{ children?: React.ReactNode }> = (props) => {
     const [user, setUser] = useState<User | null>(null);
+    const [processing, setProcessing] = useState<boolean>(false);
 
     useEffect(() => {
+        setProcessing(true);
         const auth = getAuth();
         onAuthStateChanged(auth, user => {
             setUser(user || null);
+            setProcessing(false);
+        },
+        error => {
+            console.error(error);
+            setProcessing(false);
+        },
+        () => {
+            console.log('completed');
         });
     }, []);
 
     const loginHandler = async (email: string, password: string) => {
         try {
+            setProcessing(true);
             const auth = getAuth();
             await signInWithEmailAndPassword(auth, email, password);
         }
         catch (error: any) {
             console.error(error.message);
             return error.message;
+        }
+        finally {
+            setProcessing(false);
         }
         return null;
     };
@@ -49,6 +63,7 @@ const AuthContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =>
         }
         try {
             const err = await loginHandler(user.email, oldPassowrd);
+            setProcessing(true);
             if (err) {
                 return err;
             }
@@ -58,26 +73,34 @@ const AuthContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =>
             console.error(error.message);
             return error.message;
         }
+        finally {
+            setProcessing(false);
+        }
         return null;
     };
 
     const logoutHandler = async () => {
         const auth = getAuth();
         try {
+            setProcessing(true);
             await auth.signOut();
         }
         catch (error: any) {
             console.error(error.message);
+            setProcessing(false);
             return error.message;
+        }
+        finally {
+            setProcessing(false);
         }
         return null;
     };
 
     const contextValue: AuthContextType = {
-        user: user,
         uid: user?.uid,
         email: user?.email,
-        isLoggedIn: !!user,
+        loggedIn: !!user,
+        authProcessing: processing,
         login: loginHandler,
         changePassword: changePasswordHandler,
         logout: logoutHandler,

@@ -7,7 +7,7 @@ import Todo from "./Todo";
 import Overlay from "./Overlay";
 
 const Todos: React.FC = () => {
-    const { todos, checkTodo, cloudStatus } = useContext(TodosContext);
+    const { todos, checkTodo, todosProcessing } = useContext(TodosContext);
     const [flipKey, setFlipKey] = useState(true);
     
     const sortHandler = () => {
@@ -26,7 +26,7 @@ const Todos: React.FC = () => {
             <NavLink to="/new"><span className="icon-plus margin-right"></span></NavLink>
         </h1>
         <section>
-            <Overlay show={cloudStatus === 'starting'}></Overlay>
+            <Overlay show={todosProcessing}></Overlay>
             <Flipper element="ul" flipKey={flipKey} spring="veryGentle">
                 {todos.map((todo, index) =>
                     <Flipped flipId={todo.id} key={todo.id}>

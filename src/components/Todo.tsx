@@ -7,7 +7,7 @@ import * as Dates from "../util/dates";
 import * as Frequency from "../util/frequency";
 
 const Todo: React.FC<{ todo: TodoModel; index: number, onCheckTodo: (action: string, todo: TodoModel) => void }> = (props) => {
-    const { isLoggedIn } = useContext(AuthContext);
+    const { loggedIn } = useContext(AuthContext);
     const nodeRef = useRef(null);
     const isNew = props.todo.lastDone === 0;
     const lastDoneDate = Dates.getDate(props.todo.lastDone);
@@ -40,7 +40,7 @@ const Todo: React.FC<{ todo: TodoModel; index: number, onCheckTodo: (action: str
             <NavLink to={props.todo.id} style={{ flex: "auto", marginRight: "0.5rem" }} >
                 <div style={{ fontWeight: "bold", overflowWrap: "anywhere" }}>
                     {props.todo.text}
-                    { isLoggedIn ? 
+                    { loggedIn ? 
                         <span className={props.todo.source === 'Cloud' ? 'icon-cloud' : ''}
                             style={{ float: 'right', color: 'var(--text-secondary)'}}>
                         </span>
