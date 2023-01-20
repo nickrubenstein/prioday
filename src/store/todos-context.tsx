@@ -28,8 +28,8 @@ export const TodosContext = React.createContext<TodosContextType>({
 const emptyList: TodoModel[] = [];
 
 const TodosContextProvider: React.FC<{ children?: React.ReactNode }> = (props) => {
-    const { uid, authProcessing } = useContext(AuthContext);
-    const todosDbPath = uid ? 'users/' + uid + '/todos' : undefined;
+    const { user, authProcessing } = useContext(AuthContext);
+    const todosDbPath = user ? 'users/' + user.uid + '/todos' : undefined;
     const [cloudTodos, setCloudTodos] = useCloud<TodoModel[]>(emptyList, todosDbPath);
     const [deviceTodos, setDeviceTodos] = useStorage<TodoModel[]>(emptyList, "todo");
     const processing = authProcessing || cloudTodos.status === 'processing';

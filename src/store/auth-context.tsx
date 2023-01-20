@@ -1,23 +1,23 @@
 import React, { createContext, useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, updatePassword, User } from "firebase/auth";
+import { getAuth, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword, User } from "firebase/auth";
 
 type AuthContextType = {
-    uid?: string,
-    email?: string | null,
-    loggedIn: boolean,
+    user: User | null,
     authProcessing: boolean,
     login: (email: string, password: string) => Promise<string | null>,
     changePassword: (oldPassword: string, newPassword: string) => Promise<string | null>,
+    verifyEmail: () => Promise<string | null>,
+    forgotPassword: (email: string) => Promise<string | null>,
     logout: () => Promise<string | null>
 };
 
 export const AuthContext = createContext<AuthContextType>({
-    uid: '',
-    email: '',
-    loggedIn: false,
+    user: null,
     authProcessing: false,
     login: async (email: string, password: string) => null,
     changePassword: async (oldPassowrd: string, newPassword: string) => null,
+    verifyEmail: async () => null,
+    forgotPassword: async (email: string) => null,
     logout: async () => null,
 });
 
@@ -59,7 +59,7 @@ const AuthContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =>
 
     const changePasswordHandler = async (oldPassowrd: string, newPassword: string) => {
         if (!user || !user.email) {
-            return null;
+            return 'Must be logged in to change password';
         }
         try {
             const err = await loginHandler(user.email, oldPassowrd);
@@ -79,6 +79,43 @@ const AuthContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =>
         return null;
     };
 
+    const verifyEmailHandler = async () => {
+        if (!user) {
+            return 'Must be logged in to verify email';
+        }
+        try {
+            setProcessing(true);
+            await sendEmailVerification(user);
+        }
+        catch (error: any) {
+            console.error(error.message);
+            return error.message;
+        }
+        finally {
+            setProcessing(false);
+        }
+        return null;
+    };
+
+    const forgotPasswordHandler = async (email: string) => {
+        if (!email || !email.trim()) {
+            return 'No email specified';
+        }
+        try {
+            setProcessing(true);
+            const auth = getAuth();
+            await sendPasswordResetEmail(auth, email);
+        }
+        catch (error: any) {
+            console.error(error.message);
+            return error.message;
+        }
+        finally {
+            setProcessing(false);
+        }
+        return null;
+    };
+
     const logoutHandler = async () => {
         const auth = getAuth();
         try {
@@ -87,7 +124,6 @@ const AuthContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =>
         }
         catch (error: any) {
             console.error(error.message);
-            setProcessing(false);
             return error.message;
         }
         finally {
@@ -97,12 +133,12 @@ const AuthContextProvider: React.FC<{ children?: React.ReactNode }> = (props) =>
     };
 
     const contextValue: AuthContextType = {
-        uid: user?.uid,
-        email: user?.email,
-        loggedIn: !!user,
+        user: user,
         authProcessing: processing,
         login: loginHandler,
         changePassword: changePasswordHandler,
+        verifyEmail: verifyEmailHandler,
+        forgotPassword: forgotPasswordHandler,
         logout: logoutHandler,
     };
 

@@ -168,6 +168,12 @@ button:active {
     opacity: 100%;
 }
 
+button:disabled,
+input:disabled {
+    opacity: 25%;
+    cursor: not-allowed;
+}
+
 .frequency-unit {
     display: flex;
     justify-content: flex-start;

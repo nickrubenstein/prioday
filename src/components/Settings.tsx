@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { NavLink } from "react-router-dom";
 import Account from "./Account";
+import Auth from "./Auth";
 
 const Settings: React.FC<{ theme: string, onTheme: () => void }> = (props) => {
     const isDark = props.theme === 'dark';
@@ -23,6 +24,7 @@ const Settings: React.FC<{ theme: string, onTheme: () => void }> = (props) => {
                 </div>
             </form>
             <Account></Account>
+            <Auth></Auth>
         </section>
     </Fragment>;
 }

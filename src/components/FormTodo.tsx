@@ -5,11 +5,11 @@ import Frequency from "./Frequency";
 
 const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void }> = (props) => {
     const isNew = !props.todo;
-    const { loggedIn } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const [todo, setTodo] = useState(() => {
         if (isNew) {
             let newTodo = new TodoModel();
-            newTodo.source = loggedIn ? 'Cloud' : 'Device';
+            newTodo.source = user ? 'Cloud' : 'Device';
             return newTodo;
         } 
         return new TodoModel(props.todo);
@@ -68,7 +68,7 @@ const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void
                     <input type="number" id="count" min={1} value={todo.count} onChange={handleCountChange}/>
                 </div>
             }
-            { loggedIn
+            { user
                 ? 
                 <div className="checkmark" style={{ marginBottom: "0.5rem"}}>
                     <label htmlFor="group">Store in { todo.source }</label>
