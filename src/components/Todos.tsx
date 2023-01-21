@@ -36,7 +36,7 @@ const Todos: React.FC = () => {
                     </Flipped>
                 )}
             </Flipper>
-            {todos.length === 0 ? 'Add a task by selecting the plus in the top right' : ''}
+            { !todosProcessing && todos.length === 0 ? 'Add a task by selecting the plus in the top right' : ''}
         </section>
     </Fragment>;
 }
