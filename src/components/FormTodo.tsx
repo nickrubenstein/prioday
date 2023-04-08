@@ -50,7 +50,7 @@ const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void
         <form onSubmit={submitHandler}>
             <div>
                 <label htmlFor="text">Task Name</label>
-                <input type="text" minLength={1} id="text" value={todo.text} onChange={handleTextChange}/>
+                <input type="text" minLength={1} id="text" value={todo.text} onChange={handleTextChange} required/>
             </div>
             <div className="checkmark">
                 <label htmlFor="repeat">Repeat Forever</label>
@@ -65,7 +65,7 @@ const FormTodo: React.FC<{ todo?: TodoModel, onSubmit: (todo: TodoModel) => void
                 : 
                 <div>
                     <label htmlFor="count">Do {todo.count} Time{todo.count === 1 ? '' : 's'}</label>
-                    <input type="number" id="count" min={1} value={todo.count} onChange={handleCountChange}/>
+                    <input type="number" id="count" min={1} value={todo.count ? todo.count : ''} onChange={handleCountChange} required/>
                 </div>
             }
             { user
