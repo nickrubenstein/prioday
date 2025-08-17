@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Prioday</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link id="theme-style" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.min.css?v=1.0.0">
+    <script src="js/settings.js?v=1.0.0"></script>
+    <link rel="stylesheet" href="css/global.css?v=1.0.0">
+    <link rel="stylesheet" href="css/icons/style.css?v=1.0.0">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js?v=1.0.0"></script>
+    <script src="js/date.js?v=1.0.0"></script>
+</head>
+
+<body x-data="date">
+    <h1>
+        <a href="index.html"><span class="icon-undo2"></span></a>
+        <span>Settings</span>
+        <a href="settings.html"><span class="icon-cog"></span></a>
+    </h1>
+    <section x-data="settings">
+        <form id="theme-form">
+            <div>
+                <label htmlFor="theme">Theme:</label> 
+                <div class="radio-group round">
+                    <input type="radio" id="theme-dark" value="dark" name="theme" x-model="theme" @change="onThemeChange">
+                    <label for="theme-dark">Dark</label> 
+                    <input type="radio" id="theme-light" value="light" name="theme" x-model="theme" @change="onThemeChange">
+                    <label for="theme-light">Light</label> 
+                </div>
+            </div>
+        </form>
+        <form id="animation-form">
+            <div>
+                <label htmlFor="animation">Animation Effects:</label>
+                <label class="switch">
+                    <input type="checkbox" id="animation" x-model="animation" @change="onAnimationChange"/>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </form>
+    </section>
+</body>
+
+</html>

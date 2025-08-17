@@ -1,0 +1,260 @@
+:root {
+    --animation-duration: 500ms;
+    --done: green;
+    --overdue: red;
+}
+
+html,
+body {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    background: black;
+}
+
+html {
+    justify-content: center;
+}
+
+body {
+    flex-direction: column;
+}
+
+h1 {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    padding: .25rem 0;
+    text-align: center;
+    border-bottom: 2px solid var(--background-alt);
+}
+
+section {
+    flex-grow: 1;
+    margin: 0.5rem;
+    overflow-y: auto;
+    position: relative;
+}
+
+.todos-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.todo-container {
+    display: flex;
+    background: var(--background);
+    border-radius: 1rem;
+    margin-bottom: 0.5rem;
+    padding: .25rem;
+    border: solid transparent 0px;
+    transition: border 250ms ease-out, box-shadow var(--animation-duration);
+    z-index: 1;
+}
+
+.todo-container button {
+    color: var(--done);
+    background: none;
+}
+
+.todo-text {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+.todo-date {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 8rem;
+    text-align: center;
+}
+
+.todo-done {
+    box-shadow: inset -20px 0 0 0 var(--done);
+}
+.todo-done button {
+    color: var(--done);
+}
+
+.todo-today {
+    box-shadow: inset 20px 0 0 0 var(--selection);
+}
+.todo-today button {
+    color: var(--selection);
+}
+
+.todo-overdue {
+    box-shadow: inset 20px 0 0 0 var(--overdue);
+}
+.todo-overdue button {
+    color: var(--overdue);
+}
+
+.animateTodo {
+    animation: animateTodo var(--animation-duration);
+}
+
+@keyframes animateTodo {
+    0% {
+        transform: translateY(var(--animate-todo-delta));
+    }
+}
+
+.todo-check {
+    width: 6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.todo-check > button {
+    width: 3rem;
+    padding: 0rem;
+    margin: 0rem;
+    font-size: xx-large;
+}
+
+.todo-check > button:hover {
+    color: var(--done);
+}
+
+form {
+    margin: 0 auto .5rem;
+    max-width: 40rem;
+}
+
+form>div {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 0;
+}
+
+input {
+    font-size: 1.5rem;
+    border-bottom: 2px solid var(--selection);
+    border-radius: 10px;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0;
+    box-sizing: border-box;
+    margin-bottom: .5rem;
+    transition: border var(--animation-duration);
+    width: 100%;
+}
+
+input:focus {
+    border-bottom: 2px solid var(--form-text);
+    box-shadow: none;
+}
+
+input.validate:invalid+span::after {
+    content: " ✖";
+    color: red;
+}
+
+input.validate:valid+span::after {
+    content: " ✓";
+    color: green;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--selection);
+  text-decoration: none;
+}
+
+/* Styling for the checkbox switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    width: 50px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--background);
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--form-text);
+    transition: var(--animation-duration);
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: var(--selection);
+}
+
+input:checked+.slider:before {
+    transform: translateX(24px);
+}
+
+/* Group radio button styling */
+.radio-group {
+    display: inline-flex;
+    /* border: 1px solid var(--background-alt); */
+    overflow: hidden;
+}
+
+/* Styling each radio button label like a button */
+.radio-group label {
+    padding: 10px 20px;
+    margin: 0;
+    background-color: var(--background);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    cursor: pointer;
+    /* border-right: 1px solid var(--background-alt); */
+}
+
+/* When a radio button is checked, style the corresponding label */
+.radio-group input[type="radio"]:checked+label {
+    background-color: var(--selection);
+    color: var(--form-text);
+}
+
+/* Hide the actual radio buttons */
+.radio-group input[type="radio"] {
+    display: none;
+}
+
+.radio-group.round label:nth-child(2) {
+    border-bottom-left-radius: 10px;
+}
+
+.radio-group.round label:last-child {
+    border-bottom-right-radius: 10px;
+}

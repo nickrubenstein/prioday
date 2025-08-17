@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Prioday</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link id="theme-style" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.min.css?v=1.0.0">
+    <script src="js/settings.js?v=1.0.0"></script>
+    <link rel="stylesheet" href="css/global.css?v=1.0.0">
+    <link rel="stylesheet" href="css/icons/style.css?v=1.0.0">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js?v=1.0.0"></script>
+    <script src="js/date.js?v=1.0.0"></script>
+    <script src="js/todos.js?v=1.0.0"></script>
+    <script src="js/todo.js?v=1.0.0"></script>
+</head>
+<body x-data="date">
+    <h1>
+        <a href="settings.html"><span class="icon-cog"></span></a>
+        <span x-text="'Prioday ' + today"></span>
+        <a href="new.html"><span class="icon-plus"></span></a>
+    </h1>
+    <section>
+        <div class="todos-list" x-data="todos">
+            <template x-for="(t,i) in todoList" :key="t.id">
+                <div x-data="todo(t,i,$el)" class="todo-container" x-show="todoVisible" x-transition x-effect="updateTodoOrder(i)"
+                    :class="{
+                        'todo-done': doneToday,
+                        'todo-today': dueToday,
+                        'todo-overdue': overdue,
+                        [animateTodo]: !!animateTodo
+                    }"
+                    :style="{order: i, '--animate-todo-delta': animateTodoDelta}">
+                    <div class="todo-date">
+                        <div x-text="lastDoneDate"></div>
+                        <div x-text="lastDoneAgo"></div>
+                    </div>
+                    <a class="todo-text" :href="'detail.html?todoId=' + t.id">
+                        <div class="todo-text"><span x-text="t.text"></span><span x-text="t.frequency"></span></div>
+                    </a>
+                    <div class="todo-date">
+                        <div x-text="nextDoneDate"></div>
+                        <div x-text="nextDoneIn"></div>
+                    </div>
+                    <template x-if="!doneToday">
+                        <div class="todo-check">
+                            <button x-on:click="doneTodo(t.id); updateTodoInfo();"><span class="icon-checkmark2"></span></button>
+                        </div>
+                    </template>
+                    <template x-if="doneToday">
+                        <div class="todo-check"></div>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </section>
+</body>
+</html>

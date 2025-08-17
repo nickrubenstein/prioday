@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Prioday</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link id="theme-style" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.min.css?v=1.0.0">
+    <script src="js/settings.js?v=1.0.0"></script>
+    <link rel="stylesheet" href="css/global.css?v=1.0.0">
+    <link rel="stylesheet" href="css/icons/style.css?v=1.0.0">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js?v=1.0.0"></script>
+    <script src="js/date.js?v=1.0.0"></script>
+    <script src="js/detail.js?v=1.0.0"></script>
+</head>
+<body x-data="date">
+    <h1>
+        <a href="index.html"><span class="icon-undo2"></span></a>
+        <span>New Todo</span>
+        <a href="new.html"><span class="icon-plus"></span></a>
+    </h1>
+    <section>
+        <form x-data="detail" @submit="addTodo" action="index.html">
+            <div>
+                <label htmlFor="text">Todo Name</label>
+                <input class="validate" type="text" minLength="1" id="text" x-model="formTodo.text" required/>
+            </div>
+            <div>
+                <label htmlFor="repeat">Repeat Forever</label>
+                <label class="switch">
+                    <input type="checkbox" id="repeat" x-model="formTodo.repeat"/>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div>
+                <label htmlFor="frequency">Frequency - <span x-text="formTodoFrequencyDisplay"></span></label>
+                <div class="radio-group">
+                    <input type="radio" id="day" name="frequency" value="d" x-model="formTodoFrequencyUnit">
+                    <label for="day">Day</label>
+            
+                    <input type="radio" id="week" name="frequency" value="w" x-model="formTodoFrequencyUnit">
+                    <label for="week">Week</label>
+            
+                    <input type="radio" id="month" name="frequency" value="m" x-model="formTodoFrequencyUnit">
+                    <label for="month">Month</label>
+            
+                    <input type="radio" id="year" name="frequency" value="y" x-model="formTodoFrequencyUnit">
+                    <label for="year">Year</label>
+                </div>
+                <input class="validate" type="number" id="number" x-model="formTodoFrequencyCount" min="1" placeholder="Frequency">
+            </div>
+            <button>Create</button>
+        </form>
+    </section>
+</body>
+</html>
