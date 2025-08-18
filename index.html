@@ -16,7 +16,7 @@
 <body x-data="date">
     <h1>
         <a href="settings.html"><span class="icon-cog"></span></a>
-        <span x-text="'Prioday ' + today"></span>
+        <a href="about.html"><span x-text="'Prioday ' + today"></span></a>
         <a href="new.html"><span class="icon-plus"></span></a>
     </h1>
     <section>
@@ -49,6 +49,15 @@
                     <template x-if="doneToday">
                         <div class="todo-check"></div>
                     </template>
+                </div>
+            </template>
+            <template x-if="todoList.length == 0">
+                <div class="todo-container" style="flex-direction: column; text-align: center; padding: 2rem;">
+                    <h3 style="margin-top: 0;">Welcome to Prioday!</h3>
+                    <p>Track recurring tasks like chores, habits, and responsibilities. Never forget when you last did something or when it's due next.</p>
+                    <p><strong>Get started:</strong> Click the <span class="icon-plus"></span> above to add your first recurring task.</p>
+                    <p><strong>Change Settings:</strong> Click the <span class="icon-cog"></span> above to change settings such as switching between light/dark theme.</p>
+                    <a href="about.html" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--selection); border-radius: 0.5rem; color: var(--form-text); text-decoration: none;">Learn More in our about page (also found by clicking the Prioday title above)</a>
                 </div>
             </template>
         </div>
