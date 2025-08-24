@@ -17,3 +17,22 @@ For organizing chores and tasks on daily, weekly, monthly, or yearly schedules.
 - Tasks that do not need to be done until a future date are further down the list
 - Tasks that should have been done yesterday will be shown in red
 - Easily see the last time a task was done and the days before a task needs to be done again
+
+## Development
+
+### Running Tests
+
+This project uses Playwright for end-to-end testing.
+
+**Prerequisites:**
+1. Install dependencies: `npm install`
+2. Install browser binaries: `npx playwright install`
+
+**Test Commands:**
+- `npm test` - Run all tests in headless mode
+- `npm run test:headed` - Run tests with browser UI visible
+- `npm run test:ui` - Open interactive test runner
+- `npm run test:report` - View detailed test results
+
+**Manual Testing:**
+- `npm run serve` - Start local development server on http://localhost:3000

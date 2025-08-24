@@ -1,0 +1,19 @@
+{
+  "name": "prioday",
+  "version": "1.0.0",
+  "description": "For organizing chores and tasks on daily, weekly, monthly, or yearly schedules.",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "serve": "http-server ./src -p 3000 -s"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.54.2",
+    "http-server": "^14.1.1"
+  }
+}
