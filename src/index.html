@@ -35,19 +35,32 @@
                         <div x-text="lastDoneAgo"></div>
                     </div>
                     <a class="todo-text" :href="'detail.html?todoId=' + t.id">
-                        <div class="todo-text"><span x-text="t.text"></span><span x-text="t.frequency"></span></div>
+                        <div class="todo-text">
+                            <span x-text="t.text"></span>
+                            <span>
+                                <template x-if="!t.repeat">
+                                    <span x-text="'x' + t.count"></span>
+                                </template>
+                                <span x-text="t.frequency"></span>
+                            </span>
+                        </div>
                     </a>
                     <div class="todo-date">
                         <div x-text="nextDoneDate"></div>
                         <div x-text="nextDoneIn"></div>
                     </div>
-                    <template x-if="!doneToday">
+                    <template x-if="!doneToday && !(!t.repeat && t.count == 0)">
                         <div class="todo-check">
                             <button x-on:click="doneTodo(t.id); updateTodoInfo();"><span class="icon-checkmark2"></span></button>
                         </div>
                     </template>
-                    <template x-if="doneToday">
+                    <template x-if="doneToday && !(!t.repeat && t.count == 0)">
                         <div class="todo-check"></div>
+                    </template>
+                    <template x-if="!t.repeat && t.count == 0">
+                        <div class="todo-check">
+                            <button x-on:click="removeTodo(t.id); updateTodoInfo();"><span class="icon-bin"></span></button>
+                        </div>
                     </template>
                 </div>
             </template>

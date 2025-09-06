@@ -60,6 +60,9 @@ document.addEventListener('alpine:init', () => {
             if (todo) {
                 todo.lastLastDone = todo.lastDone;
                 todo.lastDone = Date.now();
+                if (!todo.repeat) {
+                    todo.count--;
+                }
                 this.saveTodoList();
                 this.formTodo = {...todo};
             }
@@ -69,13 +72,16 @@ document.addEventListener('alpine:init', () => {
             const todo = this.todoList.find(t => t.id == todoId);
             if (todo) {
                 todo.lastDone = todo.lastLastDone;
+                if (!todo.repeat) {
+                    todo.count++;
+                }
                 this.saveTodoList();
                 this.formTodo = {...todo};
             }
         },
 
         removeTodo(todoId) {
-            let removeIndex = this.todoList.findIndex((todo) => todo.id == todoId);
+            let removeIndex = this.todoList.findIndex(t => t.id == todoId);
             if (removeIndex >= 0) {
                 this.todoList.splice(removeIndex, 1);
                 this.saveTodoList();

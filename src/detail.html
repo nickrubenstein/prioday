@@ -32,7 +32,7 @@
         </template>
         <form @submit.prevent="addTodo" action="index.html">
             <div>
-                <label htmlFor="text">Task Name</label>
+                <label htmlFor="text">Todo Name</label>
                 <input class="validate" type="text" minLength="1" id="text" x-model="formTodo.text" required/>
             </div>
 
@@ -43,6 +43,12 @@
                     <span class="slider"></span>
                 </label>
             </div>
+            <template x-if="formTodo.repeat == false">
+                <div>
+                    <label htmlFor="count">Count</label>
+                    <input class="validate" type="number" id="count" x-model="formTodo.count" min="1" placeholder="Count">
+                </div>
+            </template>
 
             <div>
                 <label htmlFor="frequency">Frequency - <span x-text="formTodoFrequencyDisplay"></span></label>
