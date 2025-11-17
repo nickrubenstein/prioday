@@ -8,6 +8,7 @@ declare global {
       getDateString(date: Date): string;
       getDaysAgoString(oldDate: Date | number, newDate?: Date | number, inFuture?: boolean): string;
       nextDate(lastDone: number, frequency: string): Date;
+      formatDate(date: Date | number): string;
       init(): void;
     };
     __settings: {

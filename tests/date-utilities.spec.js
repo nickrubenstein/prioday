@@ -102,7 +102,43 @@ test.describe('Date Utilities', () => {
       threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 3);
       return window.__date.getDaysAgoString(today, threeDaysFromNow, true);
     });
-    
+
     expect(daysInFuture).toBe('in 3 days');
+  });
+
+  test('should format date in YYYY-MM-DD format', async ({ page }) => {
+    const formatted = await page.evaluate(() => {
+      const date = new Date('2025-03-15T12:30:00');
+      return window.__date.formatDate(date);
+    });
+
+    expect(formatted).toBe('2025-03-15');
+  });
+
+  test('should format date with single digit month and day', async ({ page }) => {
+    const formatted = await page.evaluate(() => {
+      const date = new Date('2025-01-05T12:30:00');
+      return window.__date.formatDate(date);
+    });
+
+    expect(formatted).toBe('2025-01-05');
+  });
+
+  test('should format date from timestamp', async ({ page }) => {
+    const formatted = await page.evaluate(() => {
+      const timestamp = new Date('2024-12-25T00:00:00').getTime();
+      return window.__date.formatDate(timestamp);
+    });
+
+    expect(formatted).toBe('2024-12-25');
+  });
+
+  test('should format date at end of year', async ({ page }) => {
+    const formatted = await page.evaluate(() => {
+      const date = new Date('2025-12-31T23:59:59');
+      return window.__date.formatDate(date);
+    });
+
+    expect(formatted).toBe('2025-12-31');
   });
 });
