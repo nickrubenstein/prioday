@@ -74,7 +74,7 @@
             
             <div>
                 <label htmlFor="lastDone">Last Done</label>
-                <input class="validate" type="date" id="frequency" x-model="formTodoLastDoneDate"/>
+                <input class="validate" type="date" id="frequency" x-model="formTodoLastDoneDate" :max="todaysDate"/>
             </div>
             <button>Save Changes</button>
         </form>

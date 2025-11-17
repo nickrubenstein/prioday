@@ -31,11 +31,25 @@ document.addEventListener('alpine:init', () => {
         },
 
         get formTodoLastDoneDate() {
-            return (new Date(this.formTodo.lastDone)).toISOString().split('T')[0];
+            if (!this.formTodo.lastDone) {
+                return undefined;
+            }
+            return this.formatDate(this.formTodo.lastDone);
         },
         set formTodoLastDoneDate(date) {
             let offset = (new Date().getTimezoneOffset()) * window.__date.MILLISECONDS_IN_MINUTE;
-            this.formTodo.lastDone = (Date.parse(date)) + offset;
+            this.formTodo.lastDone = Date.parse(date) + offset;
+        },
+        get todaysDate() {
+            return this.formatDate(Date.now());
+        },
+
+        formatDate(date) {
+            const d = new Date(date);
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
         },
 
         todoList: [ this.formTodo ],
