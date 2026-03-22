@@ -1,82 +1,70 @@
 <!DOCTYPE html>
-<html lang="en" x-data="urlParams">
+<html lang="en">
 <head>
     <title>Prioday</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link id="theme-style" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.min.css?v=1.0.0">
     <script src="js/settings.js?v=1.0.0"></script>
+    <script src="js/controllers/detail.js?v=1.0.0"></script>
     <link rel="stylesheet" href="css/global.css?v=1.0.0">
     <link rel="stylesheet" href="css/icons/style.css?v=1.0.0">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js?v=1.0.0"></script>
-    <script src="js/urlParams.js?v=1.0.0"></script>
     <script src="js/date.js?v=1.0.0"></script>
     <script src="js/detail.js?v=1.0.0"></script>
 </head>
-<body x-data="detail(todoParamId)">
+<body>
     <h1>
         <a href="index.html"><span class="icon-undo2"></span></a>
-        <span>Details</span>
-        <a @click="removeTodo(todoParamId)" href="index.html"><span class="icon-bin"></span></a>
+        <span id="page-title">Details</span>
+        <a id="delete-button" href="index.html"><span class="icon-bin"></span></a>
     </h1>
-    <section x-data="date">
-        <template x-if="getDate(formTodo.lastDone).getTime() != getDate().getTime()">
-            <form @submit.prevent="doneTodo(formTodo.id)">
-                <button>Check</button>
-            </form>
-        </template>
-        <template x-if="getDate(formTodo.lastDone).getTime() == getDate().getTime()">
-            <form @submit.prevent="undoTodo(formTodo.id)">
-                <button>Undo Check</button>
-            </form>
-        </template>
-        <form @submit.prevent="addTodo" action="index.html">
+    <section>
+        <form id="check-form">
+            <button>Check</button>
+        </form>
+        <form id="undo-form" style="display: none;">
+            <button>Undo Check</button>
+        </form>
+        <form id="save-form" action="index.html">
             <div>
                 <label htmlFor="text">Todo Name</label>
-                <input class="validate" type="text" minLength="1" id="text" x-model="formTodo.text" required/>
+                <input class="validate" type="text" minLength="1" id="text" required/>
             </div>
 
             <div>
                 <label htmlFor="repeat">Repeat Forever</label>
                 <label class="switch">
-                    <input type="checkbox" id="repeat" x-model="formTodo.repeat"/>
+                    <input type="checkbox" id="repeat"/>
                     <span class="slider"></span>
                 </label>
             </div>
-            <template x-if="formTodo.repeat == false">
-                <div>
-                    <label htmlFor="count">Count</label>
-                    <input class="validate" type="number" id="count" x-model="formTodo.count" min="1" placeholder="Count">
-                </div>
-            </template>
+            <div id="count-div">
+                <label htmlFor="count">Count</label>
+                <input class="validate" type="number" id="count" min="1" placeholder="Count">
+            </div>
 
             <div>
-                <label htmlFor="frequency">Frequency - <span x-text="formTodoFrequencyDisplay"></span></label>
+                <label htmlFor="frequency">Frequency - <span id="frequency-display"></span></label>
                 <div class="radio-group">
-                    <input type="radio" id="day" name="frequency" value="d" x-model="formTodoFrequencyUnit">
+                    <input type="radio" id="day" name="frequency" value="d">
                     <label for="day">Day</label>
-            
-                    <input type="radio" id="week" name="frequency" value="w" x-model="formTodoFrequencyUnit">
+
+                    <input type="radio" id="week" name="frequency" value="w">
                     <label for="week">Week</label>
-            
-                    <input type="radio" id="month" name="frequency" value="m" x-model="formTodoFrequencyUnit">
+
+                    <input type="radio" id="month" name="frequency" value="m">
                     <label for="month">Month</label>
-            
-                    <input type="radio" id="year" name="frequency" value="y" x-model="formTodoFrequencyUnit">
+
+                    <input type="radio" id="year" name="frequency" value="y">
                     <label for="year">Year</label>
                 </div>
-                <input class="validate" type="number" id="number" x-model="formTodoFrequencyCount" min="1" placeholder="Frequency">
+                <input class="validate" type="number" id="number" min="1" placeholder="Frequency">
             </div>
-            <!-- <div>
-                <label htmlFor="frequency">Frequency</label>
-                <input type="text" minLength="1" id="frequency" x-model="formTodo.frequency" required/>
-            </div> -->
-            
-            <div>
+
+            <div id="last-done-div">
                 <label htmlFor="lastDone">Last Done</label>
-                <input class="validate" type="date" id="frequency" x-model="formTodoLastDoneDate" :max="todaysDate"/>
+                <input class="validate" type="date" id="lastDone"/>
             </div>
-            <button>Save Changes</button>
+            <button type="submit">Save Changes</button>
         </form>
     </section>
 </body>
