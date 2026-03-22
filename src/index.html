@@ -4,76 +4,63 @@
     <title>Prioday</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link id="theme-style" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.min.css?v=1.0.0">
     <script src="js/settings.js?v=1.0.0"></script>
+    <script src="js/controllers/index.js?v=1.0.0"></script>
     <link rel="stylesheet" href="css/global.css?v=1.0.0">
     <link rel="stylesheet" href="css/icons/style.css?v=1.0.0">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js?v=1.0.0"></script>
     <script src="js/date.js?v=1.0.0"></script>
     <script src="js/todos.js?v=1.0.0"></script>
     <script src="js/todo.js?v=1.0.0"></script>
 </head>
-<body x-data="date">
+<body>
     <h1>
         <a href="settings.html"><span class="icon-cog"></span></a>
-        <a href="about.html"><span x-text="'Prioday ' + today"></span></a>
+        <a href="about.html"><span class="prioday-today"></span></a>
         <a href="new.html"><span class="icon-plus"></span></a>
     </h1>
     <section>
-        <div class="todos-list" x-data="todos">
-            <template x-for="(t,i) in todoList" :key="t.id">
-                <div x-data="todo(t,i,$el)" class="todo-container" x-show="todoVisible" x-transition x-effect="updateTodoOrder(i)"
-                    :class="{
-                        'todo-done': doneToday,
-                        'todo-today': dueToday,
-                        'todo-overdue': overdue,
-                        [animateTodo]: !!animateTodo
-                    }"
-                    :style="{order: i, '--animate-todo-delta': animateTodoDelta}">
-                    <div class="todo-date">
-                        <div x-text="lastDoneDate"></div>
-                        <div x-text="lastDoneAgo"></div>
-                    </div>
-                    <a class="todo-text" :href="'detail.html?todoId=' + t.id">
-                        <div class="todo-text">
-                            <span x-text="t.text"></span>
-                            <span>
-                                <template x-if="!t.repeat">
-                                    <span x-text="'x' + t.count"></span>
-                                </template>
-                                <span x-text="t.frequency"></span>
-                            </span>
-                        </div>
-                    </a>
-                    <div class="todo-date">
-                        <div x-text="nextDoneDate"></div>
-                        <div x-text="nextDoneIn"></div>
-                    </div>
-                    <template x-if="!doneToday && !(!t.repeat && t.count == 0)">
-                        <div class="todo-check">
-                            <button x-on:click="doneTodo(t.id); updateTodoInfo();"><span class="icon-checkmark2"></span></button>
-                        </div>
-                    </template>
-                    <template x-if="doneToday && !(!t.repeat && t.count == 0)">
-                        <div class="todo-check"></div>
-                    </template>
-                    <template x-if="!t.repeat && t.count == 0">
-                        <div class="todo-check">
-                            <button x-on:click="removeTodo(t.id); updateTodoInfo();"><span class="icon-bin"></span></button>
-                        </div>
-                    </template>
-                </div>
-            </template>
-            <template x-if="todoList.length == 0">
-                <div class="todo-container" style="flex-direction: column; text-align: center; padding: 2rem;">
-                    <h3 style="margin-top: 0;">Welcome to Prioday!</h3>
-                    <p>Track recurring tasks like chores, habits, and responsibilities. Never forget when you last did something or when it's due next.</p>
-                    <p><strong>Get started:</strong> Click the <span class="icon-plus"></span> above to add your first recurring task.</p>
-                    <p><strong>Change Settings:</strong> Click the <span class="icon-cog"></span> above to change settings such as switching between light/dark theme.</p>
-                    <a href="about.html" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--selection); border-radius: 0.5rem; color: var(--form-text); text-decoration: none;">Learn More in our about page (also found by clicking the Prioday title above)</a>
-                </div>
-            </template>
+        <div class="todos-list">
+            <!-- Todos will be rendered here by JavaScript -->
         </div>
     </section>
+
+    <template id="todo-template">
+        <div class="todo-container">
+            <div class="todo-date">
+                <div class="last-done-date"></div>
+                <div class="last-done-ago"></div>
+            </div>
+            <a class="todo-text todo-link" href="">
+                <div class="todo-text">
+                    <span></span>
+                    <span>
+                        <span class="todo-count"></span>
+                        <span class="todo-frequency"></span>
+                    </span>
+                </div>
+            </a>
+            <div class="todo-date">
+                <div class="next-done-date"></div>
+                <div class="next-done-in"></div>
+            </div>
+            <div class="todo-check check-button">
+                <button><span class="icon-checkmark2"></span></button>
+            </div>
+            <div class="todo-check done-button" style="display: none;"></div>
+            <div class="todo-check remove-button" style="display: none;">
+                <button><span class="icon-bin"></span></button>
+            </div>
+        </div>
+    </template>
+
+    <template id="empty-state-template">
+        <div class="todo-container" style="flex-direction: column; text-align: center; padding: 2rem;">
+            <h3 style="margin-top: 0;">Welcome to Prioday!</h3>
+            <p>Track recurring tasks like chores, habits, and responsibilities. Never forget when you last did something or when it's due next.</p>
+            <p><strong>Get started:</strong> Click the <span class="icon-plus"></span> above to add your first recurring task.</p>
+            <p><strong>Change Settings:</strong> Click the <span class="icon-cog"></span> above to change settings such as switching between light/dark theme.</p>
+            <a href="about.html" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--selection); border-radius: 0.5rem; color: var(--form-text); text-decoration: none;">Learn More in our about page (also found by clicking the Prioday title above)</a>
+        </div>
+    </template>
 </body>
 </html>
