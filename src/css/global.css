@@ -1,7 +1,5 @@
 :root {
     --animation-duration: 500ms;
-    --done: green;
-    --overdue: red;
 }
 
 html,
@@ -10,7 +8,8 @@ body {
     height: 100%;
     width: 100%;
     margin: 0;
-    /* background: black; */
+    background: var(--background-body);
+    color: var(--text);
 }
 
 html {
@@ -25,7 +24,7 @@ h1 {
     display: flex;
     justify-content: space-between;
     margin: 0;
-    padding: .25rem 0;
+    padding: .5rem;
     text-align: center;
     border-bottom: 2px solid var(--background-alt);
 }
@@ -56,6 +55,8 @@ section {
 .todo-container button {
     color: var(--done);
     background: none;
+    border: 0;
+    cursor: pointer;
 }
 
 .todo-text {

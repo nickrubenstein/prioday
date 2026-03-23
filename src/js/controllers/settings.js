@@ -1,10 +1,7 @@
-const THEME_KEY = 'theme';
-const ANIMATION_KEY = 'animation';
-
 class SettingsController {
     constructor() {
-        this.theme = localStorage.getItem(THEME_KEY) || 'dark';
-        this.animation = localStorage.getItem(ANIMATION_KEY) != 'false';
+        this.theme = localStorage.getItem(window.__settings.THEME_KEY) || 'dark';
+        this.animation = localStorage.getItem(window.__settings.ANIMATION_KEY) != 'false';
     }
 
     init() {
@@ -37,11 +34,13 @@ class SettingsController {
     }
 
     onAnimationChange() {
-        localStorage.setItem(ANIMATION_KEY, this.animation);
+        localStorage.setItem(window.__settings.ANIMATION_KEY, this.animation);
+        window.__settings.animation = this.animation;
     }
 
     onThemeChange() {
-        localStorage.setItem(THEME_KEY, this.theme);
+        localStorage.setItem(window.__settings.THEME_KEY, this.theme);
+        window.__settings.applyTheme();
     }
 }
 

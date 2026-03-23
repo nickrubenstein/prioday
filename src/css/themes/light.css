@@ -1,0 +1,10 @@
+:root {
+    --done: green;
+    --overdue: red;
+    --background-body: rgb(200, 200, 200);
+    --background-alt: rgb(150, 150, 150);
+    --background: rgb(240, 240, 240);
+    --form-text: rgb(150, 150, 150);
+    --text: rgb(30, 30, 30);
+    --selection: rgb(50, 50, 50);
+}
