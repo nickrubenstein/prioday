@@ -83,11 +83,10 @@ class TodoListController {
 }
 
 class TodoItemController {
-    constructor(todo, index, element) {
+    constructor(todo, index, containerElement) {
         this.todo = todo;
         this.todoIndex = index;
-        this.element = element;
-        this.todoVisible = false;
+        this.element = containerElement;
         this.lastDoneDate = "";
         this.lastDoneAgo = "";
         this.nextDoneDate = "";
@@ -95,7 +94,6 @@ class TodoItemController {
         this.doneToday = false;
         this.dueToday = false;
         this.overdue = false;
-        this.animateTodo = "";
         this.animateTodoDelta = 0;
     }
 
@@ -116,13 +114,11 @@ class TodoItemController {
     updateTodoOrder(newIndex) {
         if (window.__settings.animation && this.todoIndex != newIndex) {
             requestAnimationFrame(() => {
-                this.animateTodo = "animateTodo";
                 this.animateTodoDelta = ((newIndex - this.todoIndex) * -this.element.offsetHeight) + 'px';
                 this.todoIndex = newIndex;
                 this.element.style.setProperty('--animate-todo-delta', this.animateTodoDelta);
-                this.element.classList.add(this.animateTodo);
+                this.element.classList.add("animateTodo");
                 setTimeout(() => {
-                    this.animateTodo = "";
                     this.animateTodoDelta = 0;
                     this.element.style.setProperty('--animate-todo-delta', '0px');
                     this.element.classList.remove('animateTodo');
@@ -134,14 +130,10 @@ class TodoItemController {
     init() {
         this.updateTodoInfo();
         if (window.__settings.animation) {
+            this.element.style.opacity = 0;
             setTimeout(() => {
-                this.todoVisible = true;
-                this.element.style.display = '';
+                this.element.style.opacity = 1;
             }, this.todoIndex * 50);
-        }
-        else {
-            this.todoVisible = true;
-            this.element.style.display = '';
         }
     }
 
@@ -216,23 +208,52 @@ class IndexController {
     }
 
     render() {
-        this.todosListElement.innerHTML = '';
-        this.todoItemControllers = [];
-
         if (this.todoListController.todoList.length === 0) {
+            this.todosListElement.innerHTML = '';
+            this.todoItemControllers = [];
             this.renderEmptyState();
             return;
         }
 
-        this.todoListController.todoList.forEach((todo, index) => {
-            const {element, container} = this.createTodoElement(todo, index);
-            this.todosListElement.appendChild(element);
-
-            const controller = new TodoItemController(todo, index, container);
-            this.todoItemControllers.push(controller);
-            controller.init();
-            controller.render();
+        // Create a map of existing controllers by todo ID
+        const existingControllers = new Map();
+        this.todoItemControllers.forEach(controller => {
+            existingControllers.set(controller.todo.id, controller);
         });
+
+        const newControllers = [];
+        const existingElements = new Set();
+
+        this.todoListController.todoList.forEach((todo, index) => {
+            let controller = existingControllers.get(todo.id);
+
+            if (controller) {
+                // Reuse existing controller and update its order
+                controller.updateTodoOrder(index);
+                controller.todoIndex = index;
+                controller.render();
+                existingElements.add(controller.element);
+            } else {
+                // Create new controller for new todo
+                const {element, container} = this.createTodoElement(todo, index);
+                this.todosListElement.appendChild(element);
+
+                controller = new TodoItemController(todo, index, container);
+                controller.init();
+                controller.render();
+            }
+
+            newControllers.push(controller);
+        });
+
+        // Remove controllers/elements that no longer exist in the list
+        this.todoItemControllers.forEach(controller => {
+            if (!existingElements.has(controller.element)) {
+                controller.element.remove();
+            }
+        });
+
+        this.todoItemControllers = newControllers;
     }
 
     renderEmptyState() {

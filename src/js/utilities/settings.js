@@ -2,7 +2,7 @@ window.__settings = {
     THEME_KEY: 'theme',
     ANIMATION_KEY: 'animation',
     theme: localStorage.getItem('theme') || 'dark',
-    animation: localStorage.getItem('animatinon') != 'false',
+    animation: localStorage.getItem('animation') != 'false',
     applyTheme() {
         const themeLink = document.getElementById('theme-style');
         if (!themeLink) return;
