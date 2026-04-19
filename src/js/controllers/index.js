@@ -112,19 +112,17 @@ class TodoItemController {
     }
 
     updateTodoOrder(newIndex) {
+        this.element.style.order = newIndex;
         if (window.__settings.animation && this.todoIndex != newIndex) {
-            requestAnimationFrame(() => {
-                this.animateTodoDelta = ((newIndex - this.todoIndex) * -this.element.offsetHeight) + 'px';
-                this.todoIndex = newIndex;
-                this.element.style.setProperty('--animate-todo-delta', this.animateTodoDelta);
-                this.element.classList.add("animateTodo");
-                setTimeout(() => {
-                    this.animateTodoDelta = 0;
-                    this.element.style.setProperty('--animate-todo-delta', '0px');
-                    this.element.classList.remove('animateTodo');
-                }, 500);
-            });
+            const delta = ((newIndex - this.todoIndex) * -this.element.offsetHeight) + 'px';
+            this.element.style.setProperty('--animate-todo-delta', delta);
+            this.element.classList.add("animateTodo");
+            
+            setTimeout(() => {
+                this.element.classList.remove('animateTodo');
+            }, 500);
         }
+        this.todoIndex = newIndex;
     }
 
     init() {
@@ -144,9 +142,6 @@ class TodoItemController {
         this.element.classList.toggle('todo-done', this.doneToday);
         this.element.classList.toggle('todo-today', this.dueToday);
         this.element.classList.toggle('todo-overdue', this.overdue);
-
-        // Update order
-        this.element.style.order = this.todoIndex;
 
         // Update text content
         this.element.querySelector('.last-done-date').textContent = this.lastDoneDate;
@@ -230,7 +225,6 @@ class IndexController {
             if (controller) {
                 // Reuse existing controller and update its order
                 controller.updateTodoOrder(index);
-                controller.todoIndex = index;
                 controller.render();
                 existingElements.add(controller.element);
             } else {

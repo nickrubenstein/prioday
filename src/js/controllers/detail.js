@@ -193,9 +193,11 @@ class DetailController {
         if (this.formTodo.repeat) {
             countDiv.style.display = 'none';
             countInput.removeAttribute('required');
+            countInput.disabled = true;
         } else {
             countDiv.style.display = '';
             countInput.setAttribute('required', 'required');
+            countInput.disabled = false;
         }
     }
 
