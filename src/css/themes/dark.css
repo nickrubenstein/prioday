@@ -1,3 +1,7 @@
+/* --background-body, --background-alt, --background, --selection are the base/fallback values.
+   When the user picks an accent color/tint in Settings, js/utilities/settings.js overrides
+   them at runtime with inline styles on :root — keep THEME_BASE_COLORS.dark there in sync
+   with the values below. */
 :root {
     --done: green;
     --overdue: red;
@@ -6,5 +10,5 @@
     --background: rgb(40, 40, 40);
     --form-text: rgb(200, 200, 200);
     --text: rgb(155, 155, 155);
-    --selection: rgb(255, 255, 255);
+    --selection: rgb(90, 90, 90);
 }

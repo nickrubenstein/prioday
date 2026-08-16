@@ -140,20 +140,74 @@ label {
 }
 
 input {
-    font-size: 1.5rem;
+    font-size: 1rem;
+    background: var(--background-alt);
+    color: var(--text);
+    border: none;
     border-bottom: 2px solid var(--selection);
     border-radius: 10px;
     border-bottom-right-radius: 0;
     border-top-left-radius: 0;
     box-sizing: border-box;
+    padding: .5rem;
     margin-bottom: .5rem;
     transition: border var(--animation-duration);
     width: 100%;
+    outline: none;
 }
 
 input:focus {
     border-bottom: 2px solid var(--form-text);
     box-shadow: none;
+    outline: none;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    border: none;
+    padding: 0;
+    height: 1.5rem;
+    cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right, var(--selection) var(--range-progress, 0%), var(--background-alt) var(--range-progress, 0%));
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    margin-top: -6px;
+    border-radius: 50%;
+    background: var(--selection);
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--background-alt);
+}
+
+input[type="range"]::-moz-range-progress {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--selection);
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: none;
+    border-radius: 50%;
+    background: var(--selection);
+    cursor: pointer;
 }
 
 input.validate:invalid+span::after {
@@ -164,6 +218,42 @@ input.validate:invalid+span::after {
 input.validate:valid+span::after {
     content: " ✓";
     color: green;
+}
+
+select {
+    font-size: 1rem;
+    background: var(--background);
+    color: var(--text);
+    border: none;
+    border-bottom: 2px solid var(--selection);
+    border-radius: 10px;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0;
+    padding: .5rem;
+    margin-bottom: .5rem;
+    outline: none;
+    cursor: pointer;
+    transition: border var(--animation-duration);
+}
+
+select:focus {
+    border-bottom: 2px solid var(--form-text);
+}
+
+button {
+    background: var(--background);
+    color: var(--text);
+    border: none;
+    border-radius: 1rem;
+    padding: .6rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background var(--animation-duration), color var(--animation-duration);
+}
+
+button:hover {
+    background: var(--selection);
+    color: var(--form-text);
 }
 
 a {

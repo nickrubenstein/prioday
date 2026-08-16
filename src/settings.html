@@ -39,6 +39,29 @@
                 </label>
             </div>
         </form>
+        <form id="accent-form">
+            <div>
+                <label htmlFor="accent-color">Accent Color:</label>
+                <select id="accent-color" name="accent-color">
+                    <option value="default">Grey</option>
+                    <option value="#3b82f6">Blue</option>
+                    <option value="#14b8a6">Teal</option>
+                    <option value="#22c55e">Green</option>
+                    <option value="#eab308">Yellow</option>
+                    <option value="#f97316">Orange</option>
+                    <option value="#ef4444">Red</option>
+                    <option value="#ec4899">Pink</option>
+                    <option value="#a855f7">Purple</option>
+                    <option value="#6366f1">Indigo</option>
+                </select>
+            </div>
+        </form>
+        <form id="tint-form">
+            <div>
+                <label htmlFor="tint-strength">Background Tint: <span id="tint-strength-value">12%</span></label>
+                <input type="range" id="tint-strength" name="tint-strength" min="0" max="50" step="1"/>
+            </div>
+        </form>
     </section>
 </body>
 
