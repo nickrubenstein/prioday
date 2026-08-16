@@ -4,7 +4,7 @@ class DetailController {
             id: crypto.randomUUID(),
             text: '',
             repeat: true,
-            frequency: 'd1',
+            frequency: window.__cron.formatFrequency('d', 1),
             count: 1,
             lastDone: 0,
             lastLastDone: 0,
@@ -119,12 +119,13 @@ class DetailController {
     }
 
     updateFrequencyDisplay() {
-        this.formTodoFrequencyUnitValue = this.formTodo.frequency.substring(0, 1);
-        this.formTodoFrequencyCountValue = this.formTodo.frequency.substring(1);
+        const { unit, count } = window.__cron.parseFrequency(this.formTodo.frequency);
+        this.formTodoFrequencyUnitValue = unit;
+        this.formTodoFrequencyCountValue = count;
     }
 
     updateFrequency() {
-        this.formTodo.frequency = this.formTodoFrequencyUnit + this.formTodoFrequencyCount;
+        this.formTodo.frequency = window.__cron.formatFrequency(this.formTodoFrequencyUnit, this.formTodoFrequencyCount);
         this.updateFrequencyDisplayText();
     }
 
@@ -244,6 +245,17 @@ class DetailController {
         // Load todo list
         try {
             this.todoList = JSON.parse(localStorage.getItem('todo')) || [];
+            let migrated = false;
+            for (const todo of this.todoList) {
+                const newFrequency = window.__cron.migrateFrequency(todo.frequency);
+                if (newFrequency !== todo.frequency) {
+                    todo.frequency = newFrequency;
+                    migrated = true;
+                }
+            }
+            if (migrated) {
+                this.saveTodoList();
+            }
         }
         catch {
             this.todoList = [];

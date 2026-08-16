@@ -56,34 +56,6 @@ test.describe('Date Utilities', () => {
     expect(newString).toBe('New');
   });
 
-  test('should calculate next date for daily frequency', async ({ page }) => {
-    const nextDate = await page.evaluate(() => {
-      const lastDone = Date.now();
-      return window.__date.nextDate(lastDone, 'd3');
-    });
-    
-    const today = new Date();
-    const expected = new Date(today);
-    expected.setDate(expected.getDate() + 3);
-    expected.setHours(0, 0, 0, 0);
-    
-    expect(new Date(nextDate).getDate()).toBe(expected.getDate());
-  });
-
-  test('should calculate next date for weekly frequency', async ({ page }) => {
-    const nextDate = await page.evaluate(() => {
-      const lastDone = Date.now();
-      return window.__date.nextDate(lastDone, 'w2');
-    });
-    
-    const today = new Date();
-    const expected = new Date(today);
-    expected.setDate(expected.getDate() + 14); // 2 weeks
-    expected.setHours(0, 0, 0, 0);
-    
-    expect(new Date(nextDate).getDate()).toBe(expected.getDate());
-  });
-
   test('should get days ago string', async ({ page }) => {
     const daysAgo = await page.evaluate(() => {
       const threeDaysAgo = new Date();

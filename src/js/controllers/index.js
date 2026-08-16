@@ -7,10 +7,26 @@ class TodoListController {
     loadTodoList() {
         try {
             this.todoList = JSON.parse(localStorage.getItem('todo')) || [];
+            const migrated = this.migrateTodoFrequencies();
             this.sortTodoList();
+            if (migrated) {
+                this.saveTodoList();
+            }
         } catch {
             this.todoList = [];
         }
+    }
+
+    migrateTodoFrequencies() {
+        let migrated = false;
+        for (const todo of this.todoList) {
+            const newFrequency = window.__cron.migrateFrequency(todo.frequency);
+            if (newFrequency !== todo.frequency) {
+                todo.frequency = newFrequency;
+                migrated = true;
+            }
+        }
+        return migrated;
     }
 
     saveTodoList() {
@@ -53,26 +69,24 @@ class TodoListController {
                 return 1;
             }
         }
-        const aNext = window.__date.nextDate(a.lastDone, a.frequency).getTime();
-        const bNext = window.__date.nextDate(b.lastDone, b.frequency).getTime();
+        const aNext = window.__cron.nextDate(a.lastDone, a.frequency).getTime();
+        const bNext = window.__cron.nextDate(b.lastDone, b.frequency).getTime();
         if (aNext === bNext) {
             if (a.frequency === b.frequency) {
                 return 0;
             }
-            const aUnit = a.frequency[0];
-            const bUnit = b.frequency[0];
-            const aCount = +a.frequency.substring(1);
-            const bCount = +b.frequency.substring(1);
+            const aParsed = window.__cron.parseFrequency(a.frequency);
+            const bParsed = window.__cron.parseFrequency(b.frequency);
             for (let o of ['y','m','w','d']) {
-                if (aUnit === o) {
-                    if (bUnit === o) {
-                        return aCount - bCount;
+                if (aParsed.unit === o) {
+                    if (bParsed.unit === o) {
+                        return aParsed.count - bParsed.count;
                     }
                     else {
                         return -1;
                     }
                 }
-                else if (bUnit === o) {
+                else if (bParsed.unit === o) {
                     return 1;
                 }
             }
@@ -100,7 +114,7 @@ class TodoItemController {
     updateTodoInfo() {
         var lastDate = window.__date.getDate(this.todo.lastDone);
         var todayDate = window.__date.getDate();
-        var nextDate = window.__date.nextDate(this.todo.lastDone, this.todo.frequency);
+        var nextDate = window.__cron.nextDate(this.todo.lastDone, this.todo.frequency);
         this.lastDoneDate = window.__date.getDateString(lastDate);
         var isNew = this.lastDoneDate == 'New';
         this.lastDoneAgo = window.__date.getDaysAgoString(lastDate, todayDate, false);

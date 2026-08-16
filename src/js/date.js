@@ -74,27 +74,6 @@ window.__date = {
         }
     },
 
-    nextDate(lastDone, frequency) {
-        const date = lastDone > 0 ? this.getDate(lastDone) : this.getDate();
-        const unit = frequency[0];
-        const count = +frequency.substring(1);
-        switch (unit) {
-            case 'd': {
-                date.setDate(date.getDate() + count); break;
-            }
-            case 'w': {
-                date.setDate(date.getDate() + (7 * count)); break;
-            }
-            case 'm': {
-                date.setMonth(date.getMonth() + count); break;
-            }
-            case 'y': {
-                date.setFullYear(date.getFullYear() + count); break;
-            }
-        }
-        return date;
-    },
-
     formatDate(date) {
         const d = new Date(date);
         const year = d.getFullYear();
