@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Prioday</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link id="theme-style" rel="stylesheet" href="css/themes/dark.css?v=2.0.0">
+    <script src="js/utilities/settings.js?v=1.0.0"></script>
+    <script src="js/controllers/settings.js?v=1.0.0"></script>
+    <link rel="stylesheet" href="css/global.css?v=1.0.0">
+    <link rel="stylesheet" href="css/icons/style.css?v=1.0.0">
+</head>
+
+<body>
+    <h1>
+        <a href="index.html"><span class="icon-undo2"></span></a>
+        <span>Settings</span>
+        <a href="https://github.com/nickrubenstein/prioday"><span class="icon-github"></span></a>
+    </h1>
+    <section>
+        <form id="theme-form">
+            <div>
+                <label htmlFor="theme">Theme:</label>
+                <div class="radio-group round">
+                    <input type="radio" id="theme-dark" value="dark" name="theme">
+                    <label for="theme-dark">Dark</label>
+                    <input type="radio" id="theme-light" value="light" name="theme">
+                    <label for="theme-light">Light</label>
+                </div>
+            </div>
+        </form>
+        <form id="animation-form">
+            <div>
+                <label htmlFor="animation">Animation Effects:</label>
+                <label class="switch">
+                    <input type="checkbox" id="animation"/>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </form>
+        <form id="accent-form">
+            <div>
+                <label htmlFor="accent-color">Accent Color:</label>
+                <select id="accent-color" name="accent-color">
+                    <option value="default">Grey</option>
+                    <option value="#3b82f6">Blue</option>
+                    <option value="#14b8a6">Teal</option>
+                    <option value="#22c55e">Green</option>
+                    <option value="#eab308">Yellow</option>
+                    <option value="#f97316">Orange</option>
+                    <option value="#ef4444">Red</option>
+                    <option value="#ec4899">Pink</option>
+                    <option value="#a855f7">Purple</option>
+                    <option value="#6366f1">Indigo</option>
+                </select>
+            </div>
+        </form>
+        <form id="tint-form">
+            <div>
+                <label htmlFor="tint-strength">Background Tint: <span id="tint-strength-value">12%</span></label>
+                <input type="range" id="tint-strength" name="tint-strength" min="0" max="50" step="1"/>
+            </div>
+        </form>
+    </section>
+</body>
+
+</html>

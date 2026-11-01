@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Prioday</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/global.css?v=1.0.0">
+    <link rel="stylesheet" href="css/icons/style.css?v=1.0.0">
+    <link id="theme-style" rel="stylesheet" href="css/themes/dark.css?v=1.0.0">
+    <script src="js/utilities/settings.js?v=1.0.0"></script>
+    <script src="js/controllers/index.js?v=1.0.0"></script>
+    <script src="js/date.js?v=1.0.0"></script>
+    <script src="js/cron.js?v=1.0.0"></script>
+    <script src="js/cron-scan.js?v=1.0.0"></script>
+</head>
+<body>
+    <h1>
+        <a href="settings.html"><span class="icon-cog"></span></a>
+        <a href="about.html"><span class="prioday-today"></span></a>
+        <a href="detail.html"><span class="icon-plus"></span></a>
+    </h1>
+    <section>
+        <div class="todos-list">
+            <!-- Todos will be rendered here by JavaScript -->
+        </div>
+    </section>
+
+    <template id="todo-template">
+        <div class="todo-container">
+            <div class="todo-date">
+                <div class="last-done-date"></div>
+                <div class="last-done-ago"></div>
+            </div>
+            <a class="todo-text todo-link" href="">
+                <div class="todo-text">
+                    <span></span>
+                    <span>
+                        <span class="todo-count"></span>
+                        <span class="todo-frequency"></span>
+                    </span>
+                </div>
+            </a>
+            <div class="todo-date">
+                <div class="next-done-date"></div>
+                <div class="next-done-in"></div>
+                <div class="todo-overdue-count"></div>
+            </div>
+            <div class="todo-check check-button">
+                <button><span class="icon-checkmark2"></span></button>
+            </div>
+            <div class="todo-check done-button" style="display: none;"></div>
+            <div class="todo-check remove-button" style="display: none;">
+                <button><span class="icon-bin"></span></button>
+            </div>
+        </div>
+    </template>
+
+    <template id="empty-state-template">
+        <div class="todo-container" style="flex-direction: column; text-align: center; padding: 2rem;">
+            <h3 style="margin-top: 0;">Welcome to Prioday!</h3>
+            <p>Track recurring tasks like chores, habits, and responsibilities. Never forget when you last did something or when it's due next.</p>
+            <p><strong>Get started:</strong> Click the <span class="icon-plus"></span> above to add your first recurring task.</p>
+            <p><strong>Change Settings:</strong> Click the <span class="icon-cog"></span> above to change settings such as switching between light/dark theme.</p>
+            <a href="about.html" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--selection); border-radius: 0.5rem; color: var(--form-text); text-decoration: none;">Learn More in our about page (also found by clicking the Prioday title above)</a>
+        </div>
+    </template>
+</body>
+</html>

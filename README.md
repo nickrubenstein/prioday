@@ -1,70 +1,118 @@
 # Prioday
 
-## A prioritized todo list for repetative chores and tasks
-For organizing chores and tasks on daily, weekly, monthly, or yearly schedules. 
+A prioritized todo list for repetitive chores and habits. Define tasks with a frequency — "every 3 days", "weekly", "monthly" — and the app sorts them by urgency so you always know what needs attention first.
 
-### Some Use cases
-- Do you need to be reminded to do that thing every 5 days, 2 weeks, or 3 months?
-- Ever forget the last time you vacuumed? 
-- Are you sure you watered the plants yesterday or was it the day before yesterday? 
-- Not sure if you finished wordle, duolingo, the daily chess puzzle today?
-- Do you need a reminder to pay that bill this month?
-- Did you filter that mead you were brewing on the 19th or the 29th of last month?
+## Features
 
-### Solution
-- Set a frequency for how often a task needs to be done
-- Tasks that need to be done today will be at the top of the todo list (colored blue)
-- Tasks that do not need to be done until a future date are further down the list
-- Tasks that should have been done yesterday will be shown in red
-- Easily see the last time a task was done and the days before a task needs to be done again
+- **Recurring Schedules** — Set tasks to repeat daily, weekly, monthly, or yearly with custom intervals (e.g., "every 3 days", "every 2 weeks")
+- **One-Time Counts** — Limit a task to a set number of completions (e.g., "do this 5 times total")
+- **Priority Sorting** — Overdue and due-today tasks float to the top, sorted by next-due date
+- **Color-Coded Status** — Overdue tasks show in red, due-today in blue, completed today in green
+- **Last Done Tracking** — Human-readable timestamps ("Today", "Yesterday", "3 days ago")
+- **Next Due Calculation** — Automatically calculates when each task is due next
+- **Local Storage Persistence** — All data saved in your browser, works fully offline
+- **Light/Dark Theme** — Toggle between themes from the settings page
+- **Smooth Animations** — Optional reorder animations when task priority changes
 
-## Why it was made
+## Use Cases
 
-This is a practice project taking a normal todo program further to learn more about react.
+- Water plants every 3 days
+- Track weekly chores (vacuuming, laundry)
+- Schedule monthly bill payments
+- Yearly reminders (birthdays, anniversaries, maintenance)
+- Build habits with daily tasks (Wordle, Duolingo, chess puzzles)
 
-# React setup
+## How It Works
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+1. **Add Tasks** — Create a todo with a name, frequency (e.g., "every 2 days", "weekly"), and last completion date
+2. **Automatic Sorting** — Tasks are sorted by urgency — overdue and due-today items appear at the top
+3. **Mark Complete** — Click the checkmark when you finish a task to update its status
+4. **Undo** — Accidentally checked a task? Undo the completion
+5. **View History** — See when each task was last done and how long until it's due next
 
-## Available Scripts
+## Architecture
 
-In the project directory, you can run:
+A multi-page app written in vanilla JavaScript, HTML, and CSS — no frameworks, no build step.
 
-### `npm start`
+```
+src/
+├── index.html            # Main todo list view (entry point)
+├── detail.html           # Task creation/editing form
+├── settings.html         # Theme and animation preferences
+├── about.html            # In-app documentation
+├── css/
+│   ├── global.css        # Base styles, form styles, animations
+│   ├── icons/            # icomoon icon font
+│   └── themes/
+│       ├── dark.css      # Dark theme CSS variables
+│       └── light.css     # Light theme CSS variables
+└── js/
+    ├── date.js           # Date utilities (window.__date)
+    ├── controllers/
+    │   ├── index.js      # Main list page controller
+    │   ├── detail.js     # Detail page controller
+    │   └── settings.js   # Settings page controller
+    └── utilities/
+        └── settings.js   # Shared settings helper (window.__settings)
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Data Model
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Each todo is a plain JavaScript object stored as JSON in `localStorage`:
 
-### `npm test`
+```json
+{
+  "id": "<uuid>",
+  "text": "Water plants",
+  "repeat": true,
+  "frequency": "d3",
+  "count": 1,
+  "lastDone": 1746057600000,
+  "lastLastDone": 0,
+  "source": "Device"
+}
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The `frequency` field encodes unit + count: `"d3"` = every 3 days, `"w2"` = every 2 weeks, `"m1"` = monthly, `"y1"` = yearly.
 
-### `npm run build`
+### Globals
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **`window.__date`** — Date utility object loaded in the HTML `<head>`. Provides `nextDate()`, `getDate()`, `getDaysAgoString()`, `formatDate()`, and more.
+- **`window.__settings`** — Settings helper that manages theme and animation preferences via `localStorage`, with an `applyTheme()` method that swaps the active stylesheet.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Rendering
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Each page instantiates a controller class on `DOMContentLoaded`. Controllers use `<template>` tags and `cloneNode(true)` to render todo items — no virtual DOM, no framework.
 
-### `npm run eject`
+## Development
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Running Locally
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+No build step required. Open `src/index.html` directly in a browser, or use a simple HTTP server:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+npx serve src
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Testing
 
-## Learn More
+This project uses Playwright for end-to-end testing of date utilities.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**Setup:**
+```bash
+npm install
+npx playwright install
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**Run tests:**
+```bash
+npm test
+```
+
+## License
+
+MIT — see [LICENSE](LICENSE) for details.
+
+## Author
+
+[Nick Rubenstein](https://github.com/nickrubenstein)

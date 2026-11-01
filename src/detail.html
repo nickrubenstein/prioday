@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Prioday</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/global.css?v=1.0.0">
+    <link rel="stylesheet" href="css/icons/style.css?v=1.0.0">
+    <link id="theme-style" rel="stylesheet" href="css/themes/dark.css?v=1.0.0">
+    <script src="js/utilities/settings.js?v=1.0.0"></script>
+    <script src="js/controllers/detail.js?v=1.0.0"></script>
+    <script src="js/date.js?v=1.0.0"></script>
+    <script src="js/cron.js?v=1.0.0"></script>
+    <script src="js/cron-field-input.js?v=1.0.0"></script>
+</head>
+<body>
+    <h1>
+        <a href="index.html"><span class="icon-undo2"></span></a>
+        <span id="page-title">Details</span>
+        <a id="delete-button" href="index.html"><span class="icon-bin"></span></a>
+    </h1>
+    <section>
+        <form id="check-form">
+            <button>Check</button>
+        </form>
+        <form id="undo-form" style="display: none;">
+            <button>Undo Check</button>
+        </form>
+        <form id="save-form" action="index.html">
+            <div>
+                <label htmlFor="text">Todo Name</label>
+                <input class="validate" type="text" minLength="1" id="text" required/>
+            </div>
+
+            <div>
+                <label htmlFor="repeat">Repeat Forever</label>
+                <label class="switch">
+                    <input type="checkbox" id="repeat"/>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div id="count-div">
+                <label htmlFor="count">Count</label>
+                <input class="validate" type="number" id="count" min="1" placeholder="Count">
+            </div>
+
+            <div>
+                <label>Frequency - <span id="frequency-display"></span></label>
+            </div>
+            <div id="cron-dayOfMonth-field" class="cron-field">
+                <label class="cron-field-label">Day of month</label>
+                <div class="radio-group cron-mode-group">
+                    <input type="radio" id="dayOfMonth-mode-wildcard" name="dayOfMonth-mode" value="wildcard" checked>
+                    <label for="dayOfMonth-mode-wildcard">All</label>
+
+                    <input type="radio" id="dayOfMonth-mode-step" name="dayOfMonth-mode" value="step">
+                    <label for="dayOfMonth-mode-step">Every</label>
+
+                    <input type="radio" id="dayOfMonth-mode-list" name="dayOfMonth-mode" value="list">
+                    <label for="dayOfMonth-mode-list">List</label>
+
+                    <input type="radio" id="dayOfMonth-mode-range" name="dayOfMonth-mode" value="range">
+                    <label for="dayOfMonth-mode-range">Range</label>
+                </div>
+                <div class="cron-field-detail">
+                    <div class="cron-field-list" style="display:none;">
+                        <input type="text" id="dayOfMonth-list" placeholder="e.g. 1,2,31">
+                    </div>
+                    <div class="cron-field-range" style="display:none;">
+                        <input type="number" id="dayOfMonth-range-min" min="1" max="31" placeholder="From">
+                        <input type="number" id="dayOfMonth-range-max" min="1" max="31" placeholder="To">
+                    </div>
+                    <input class="cron-field-step" type="number" id="dayOfMonth-step" min="1" placeholder="Every N" style="display:none;">
+                </div>
+            </div>
+            <div id="cron-month-field" class="cron-field">
+                <label class="cron-field-label">Month</label>
+                <div class="radio-group cron-mode-group">
+                    <input type="radio" id="month-mode-wildcard" name="month-mode" value="wildcard" checked>
+                    <label for="month-mode-wildcard">All</label>
+
+                    <input type="radio" id="month-mode-step" name="month-mode" value="step">
+                    <label for="month-mode-step">Every</label>
+
+                    <input type="radio" id="month-mode-list" name="month-mode" value="list">
+                    <label for="month-mode-list">List</label>
+
+                    <input type="radio" id="month-mode-range" name="month-mode" value="range">
+                    <label for="month-mode-range">Range</label>
+                </div>
+                <div class="cron-field-detail">
+                    <div class="cron-field-list" style="display:none;">
+                        <div class="cron-field-checkbox-group">
+                            <input type="checkbox" id="month-list-1" value="1">
+                            <label for="month-list-1">Jan</label>
+                            <input type="checkbox" id="month-list-2" value="2">
+                            <label for="month-list-2">Feb</label>
+                            <input type="checkbox" id="month-list-3" value="3">
+                            <label for="month-list-3">Mar</label>
+                            <input type="checkbox" id="month-list-4" value="4">
+                            <label for="month-list-4">Apr</label>
+                            <input type="checkbox" id="month-list-5" value="5">
+                            <label for="month-list-5">May</label>
+                            <input type="checkbox" id="month-list-6" value="6">
+                            <label for="month-list-6">Jun</label>
+                            <input type="checkbox" id="month-list-7" value="7">
+                            <label for="month-list-7">Jul</label>
+                            <input type="checkbox" id="month-list-8" value="8">
+                            <label for="month-list-8">Aug</label>
+                            <input type="checkbox" id="month-list-9" value="9">
+                            <label for="month-list-9">Sep</label>
+                            <input type="checkbox" id="month-list-10" value="10">
+                            <label for="month-list-10">Oct</label>
+                            <input type="checkbox" id="month-list-11" value="11">
+                            <label for="month-list-11">Nov</label>
+                            <input type="checkbox" id="month-list-12" value="12">
+                            <label for="month-list-12">Dec</label>
+                        </div>
+                    </div>
+                    <div class="cron-field-range" style="display:none;">
+                        <select id="month-range-min">
+                            <option value="1">Jan</option>
+                            <option value="2">Feb</option>
+                            <option value="3">Mar</option>
+                            <option value="4">Apr</option>
+                            <option value="5">May</option>
+                            <option value="6">Jun</option>
+                            <option value="7">Jul</option>
+                            <option value="8">Aug</option>
+                            <option value="9">Sep</option>
+                            <option value="10">Oct</option>
+                            <option value="11">Nov</option>
+                            <option value="12">Dec</option>
+                        </select>
+                        <select id="month-range-max">
+                            <option value="1">Jan</option>
+                            <option value="2">Feb</option>
+                            <option value="3">Mar</option>
+                            <option value="4">Apr</option>
+                            <option value="5">May</option>
+                            <option value="6">Jun</option>
+                            <option value="7">Jul</option>
+                            <option value="8">Aug</option>
+                            <option value="9">Sep</option>
+                            <option value="10">Oct</option>
+                            <option value="11">Nov</option>
+                            <option value="12">Dec</option>
+                        </select>
+                    </div>
+                    <input class="cron-field-step" type="number" id="month-step" min="1" placeholder="Every N" style="display:none;">
+                </div>
+            </div>
+            <div id="cron-dayOfWeek-field" class="cron-field">
+                <label class="cron-field-label">Day of week</label>
+                <div class="radio-group cron-mode-group">
+                    <input type="radio" id="dayOfWeek-mode-wildcard" name="dayOfWeek-mode" value="wildcard" checked>
+                    <label for="dayOfWeek-mode-wildcard">All</label>
+
+                    <input type="radio" id="dayOfWeek-mode-step" name="dayOfWeek-mode" value="step">
+                    <label for="dayOfWeek-mode-step">Every</label>
+
+                    <input type="radio" id="dayOfWeek-mode-list" name="dayOfWeek-mode" value="list">
+                    <label for="dayOfWeek-mode-list">List</label>
+
+                    <input type="radio" id="dayOfWeek-mode-range" name="dayOfWeek-mode" value="range">
+                    <label for="dayOfWeek-mode-range">Range</label>
+                </div>
+                <div class="cron-field-detail">
+                    <div class="cron-field-list" style="display:none;">
+                        <div class="cron-field-checkbox-group">
+                            <input type="checkbox" id="dayOfWeek-list-0" value="0">
+                            <label for="dayOfWeek-list-0">Sun</label>
+                            <input type="checkbox" id="dayOfWeek-list-1" value="1">
+                            <label for="dayOfWeek-list-1">Mon</label>
+                            <input type="checkbox" id="dayOfWeek-list-2" value="2">
+                            <label for="dayOfWeek-list-2">Tue</label>
+                            <input type="checkbox" id="dayOfWeek-list-3" value="3">
+                            <label for="dayOfWeek-list-3">Wed</label>
+                            <input type="checkbox" id="dayOfWeek-list-4" value="4">
+                            <label for="dayOfWeek-list-4">Thu</label>
+                            <input type="checkbox" id="dayOfWeek-list-5" value="5">
+                            <label for="dayOfWeek-list-5">Fri</label>
+                            <input type="checkbox" id="dayOfWeek-list-6" value="6">
+                            <label for="dayOfWeek-list-6">Sat</label>
+                        </div>
+                    </div>
+                    <div class="cron-field-range" style="display:none;">
+                        <select id="dayOfWeek-range-min">
+                            <option value="0">Sun</option>
+                            <option value="1">Mon</option>
+                            <option value="2">Tue</option>
+                            <option value="3">Wed</option>
+                            <option value="4">Thu</option>
+                            <option value="5">Fri</option>
+                            <option value="6">Sat</option>
+                        </select>
+                        <select id="dayOfWeek-range-max">
+                            <option value="0">Sun</option>
+                            <option value="1">Mon</option>
+                            <option value="2">Tue</option>
+                            <option value="3">Wed</option>
+                            <option value="4">Thu</option>
+                            <option value="5">Fri</option>
+                            <option value="6">Sat</option>
+                        </select>
+                    </div>
+                    <input class="cron-field-step" type="number" id="dayOfWeek-step" min="1" placeholder="Every N" style="display:none;">
+                </div>
+            </div>
+            <div id="cron-year-field" class="cron-field">
+                <label class="cron-field-label">Year</label>
+                <div class="radio-group cron-mode-group">
+                    <input type="radio" id="year-mode-wildcard" name="year-mode" value="wildcard" checked>
+                    <label for="year-mode-wildcard">All</label>
+
+                    <input type="radio" id="year-mode-step" name="year-mode" value="step">
+                    <label for="year-mode-step">Every</label>
+
+                    <input type="radio" id="year-mode-list" name="year-mode" value="list">
+                    <label for="year-mode-list">List</label>
+
+                    <input type="radio" id="year-mode-range" name="year-mode" value="range">
+                    <label for="year-mode-range">Range</label>
+                </div>
+                <div class="cron-field-detail">
+                    <div class="cron-field-list" style="display:none;">
+                        <input type="text" id="year-list" placeholder="e.g. year,year+1,year+50">
+                    </div>
+                    <div class="cron-field-range" style="display:none;">
+                        <input type="number" id="year-range-min" placeholder="From">
+                        <input type="number" id="year-range-max" placeholder="To">
+                    </div>
+                    <input class="cron-field-step" type="number" id="year-step" min="1" placeholder="Every N" style="display:none;">
+                </div>
+            </div>
+
+            <div id="last-done-div">
+                <label htmlFor="lastDone">Last Done</label>
+                <input class="validate" type="date" id="lastDone"/>
+            </div>
+            <button type="submit">Save Changes</button>
+        </form>
+    </section>
+</body>
+</html>
