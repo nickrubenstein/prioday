@@ -69,8 +69,8 @@ class TodoListController {
                 return 1;
             }
         }
-        const aNext = window.__cron.nextDate(a.lastDone, a.frequency).getTime();
-        const bNext = window.__cron.nextDate(b.lastDone, b.frequency).getTime();
+        const aNext = window.__cronScan.scan(a.frequency, a.lastDone).nextDate.getTime();
+        const bNext = window.__cronScan.scan(b.frequency, b.lastDone).nextDate.getTime();
         if (aNext === bNext) {
             if (a.frequency === b.frequency) {
                 return 0;
@@ -108,13 +108,14 @@ class TodoItemController {
         this.doneToday = false;
         this.dueToday = false;
         this.overdue = false;
+        this.overdueCount = 0;
         this.animateTodoDelta = 0;
     }
 
     updateTodoInfo() {
         var lastDate = window.__date.getDate(this.todo.lastDone);
         var todayDate = window.__date.getDate();
-        var nextDate = window.__cron.nextDate(this.todo.lastDone, this.todo.frequency);
+        var { nextDate, overdueCount } = window.__cronScan.scan(this.todo.frequency, this.todo.lastDone);
         this.lastDoneDate = window.__date.getDateString(lastDate);
         var isNew = this.lastDoneDate == 'New';
         this.lastDoneAgo = window.__date.getDaysAgoString(lastDate, todayDate, false);
@@ -122,7 +123,8 @@ class TodoItemController {
         this.nextDoneIn = isNew ? '' : window.__date.getDaysAgoString(todayDate, nextDate, true);
         this.doneToday = lastDate.getTime() == todayDate.getTime();
         this.dueToday = isNew ? true : nextDate.getTime() == todayDate.getTime();
-        this.overdue = nextDate.getTime() < todayDate.getTime();
+        this.overdueCount = isNew ? 0 : overdueCount;
+        this.overdue = this.overdueCount > 0;
     }
 
     updateTodoOrder(newIndex) {
@@ -170,10 +172,18 @@ class TodoItemController {
             countSpan.style.display = 'none';
         }
 
-        this.element.querySelector('.todo-frequency').textContent = this.todo.frequency;
+        this.element.querySelector('.todo-frequency').textContent = window.__cron.frequencyDescription(this.todo.frequency);
         this.element.querySelector('.next-done-date').textContent = this.nextDoneDate;
         this.element.querySelector('.next-done-in').textContent = this.nextDoneIn;
         this.element.querySelector('.todo-link').href = 'detail.html?todoId=' + this.todo.id;
+
+        const overdueCountSpan = this.element.querySelector('.todo-overdue-count');
+        if (this.overdueCount > 0) {
+            overdueCountSpan.textContent = '×' + this.overdueCount + ' missed';
+            overdueCountSpan.style.display = '';
+        } else {
+            overdueCountSpan.style.display = 'none';
+        }
 
         // Update button visibility
         const checkButton = this.element.querySelector('.check-button');

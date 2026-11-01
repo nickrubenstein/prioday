@@ -136,12 +136,12 @@ test.describe('Cron Evaluator', () => {
       year: window.__cron.frequencyDisplay('0 0 0 * * * */1'),
     }));
 
-    expect(results.day).toBe('1 day');
-    expect(results.days).toBe('3 days');
-    expect(results.week).toBe('1 week');
-    expect(results.weeks).toBe('2 weeks');
-    expect(results.month).toBe('1 month');
-    expect(results.year).toBe('1 year');
+    expect(results.day).toBe('Every 1 day');
+    expect(results.days).toBe('Every 3 days');
+    expect(results.week).toBe('Every 1 week');
+    expect(results.weeks).toBe('Every 2 weeks');
+    expect(results.month).toBe('Every 1 month');
+    expect(results.year).toBe('Every 1 year');
   });
 
   // Regression coverage for the old encoding, where a yearly frequency had to piggyback on the
@@ -182,5 +182,103 @@ test.describe('Cron Evaluator', () => {
     for (const { unit, parsed } of results) {
       expect(parsed).toEqual({ unit, count: 5 });
     }
+  });
+
+  test('should parse wildcard, list, range, and step field values', async ({ page }) => {
+    const results = await page.evaluate(() => ({
+      wildcard: window.__cron.parseFieldValue('*'),
+      list: window.__cron.parseFieldValue('1,15,20'),
+      singleAsList: window.__cron.parseFieldValue('5'),
+      range: window.__cron.parseFieldValue('1-5'),
+      step: window.__cron.parseFieldValue('*/3'),
+    }));
+
+    expect(results.wildcard).toEqual({ type: 'wildcard' });
+    expect(results.list).toEqual({ type: 'list', values: [1, 15, 20] });
+    expect(results.singleAsList).toEqual({ type: 'list', values: [5] });
+    expect(results.range).toEqual({ type: 'range', min: 1, max: 5 });
+    expect(results.step).toEqual({ type: 'step', step: 3 });
+  });
+
+  test('should format field descriptors back into their cron field string', async ({ page }) => {
+    const results = await page.evaluate(() => ({
+      wildcard: window.__cron.formatFieldValue({ type: 'wildcard' }),
+      list: window.__cron.formatFieldValue({ type: 'list', values: [1, 15, 20] }),
+      range: window.__cron.formatFieldValue({ type: 'range', min: 1, max: 5 }),
+      step: window.__cron.formatFieldValue({ type: 'step', step: 3 }),
+    }));
+
+    expect(results.wildcard).toBe('*');
+    expect(results.list).toBe('1,15,20');
+    expect(results.range).toBe('1-5');
+    expect(results.step).toBe('*/3');
+  });
+
+  test('should match calendar values against field descriptors', async ({ page }) => {
+    const results = await page.evaluate(() => ({
+      wildcardMatches: window.__cron.matchesField({ type: 'wildcard' }, 42, 0),
+      listMatches: window.__cron.matchesField({ type: 'list', values: [1, 15] }, 15, 0),
+      listMisses: window.__cron.matchesField({ type: 'list', values: [1, 15] }, 2, 0),
+      rangeMatches: window.__cron.matchesField({ type: 'range', min: 1, max: 5 }, 3, 0),
+      rangeMisses: window.__cron.matchesField({ type: 'range', min: 1, max: 5 }, 6, 0),
+      stepMatches: window.__cron.matchesField({ type: 'step', step: 3 }, 7, 1),
+      stepMisses: window.__cron.matchesField({ type: 'step', step: 3 }, 6, 1),
+    }));
+
+    expect(results.wildcardMatches).toBe(true);
+    expect(results.listMatches).toBe(true);
+    expect(results.listMisses).toBe(false);
+    expect(results.rangeMatches).toBe(true);
+    expect(results.rangeMisses).toBe(false);
+    expect(results.stepMatches).toBe(true);
+    expect(results.stepMisses).toBe(false);
+  });
+
+  test('should describe simple frequencies the same way frequencyDisplay does', async ({ page }) => {
+    const result = await page.evaluate(() => window.__cron.frequencyDescription('0 0 0 */3 * * *'));
+    expect(result).toBe('Every 3 days');
+  });
+
+  test('should describe combined list/range frequencies field by field', async ({ page }) => {
+    const result = await page.evaluate(() => {
+      const frequency = window.__cron.formatFields({
+        second: '0', minute: '0', hour: '0',
+        dayOfMonth: '*', month: '6-8', dayOfWeek: '1', year: '*',
+      });
+      return window.__cron.frequencyDescription(frequency);
+    });
+    expect(result).toBe('Month Jun-Aug, Day of week Mon');
+  });
+
+  test('should describe month lists and ranges using three-letter month names', async ({ page }) => {
+    const results = await page.evaluate(() => ({
+      list: window.__cron.frequencyDescription(window.__cron.formatFields({
+        second: '0', minute: '0', hour: '0',
+        dayOfMonth: '*', month: '1,6,12', dayOfWeek: '*', year: '*',
+      })),
+      range: window.__cron.frequencyDescription(window.__cron.formatFields({
+        second: '0', minute: '0', hour: '0',
+        dayOfMonth: '*', month: '3-5', dayOfWeek: '*', year: '*',
+      })),
+    }));
+
+    expect(results.list).toBe('Month Jan, Jun, Dec');
+    expect(results.range).toBe('Month Mar-May');
+  });
+
+  test('should describe day-of-week lists and ranges using three-letter day names', async ({ page }) => {
+    const results = await page.evaluate(() => ({
+      list: window.__cron.frequencyDescription(window.__cron.formatFields({
+        second: '0', minute: '0', hour: '0',
+        dayOfMonth: '*', month: '*', dayOfWeek: '1,3,5', year: '*',
+      })),
+      range: window.__cron.frequencyDescription(window.__cron.formatFields({
+        second: '0', minute: '0', hour: '0',
+        dayOfMonth: '*', month: '*', dayOfWeek: '1-5', year: '*',
+      })),
+    }));
+
+    expect(results.list).toBe('Day of week Mon, Wed, Fri');
+    expect(results.range).toBe('Day of week Mon-Fri');
   });
 });

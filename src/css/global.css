@@ -119,6 +119,9 @@ section {
     padding: 0rem;
     margin: 0rem;
     font-size: xx-large;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .todo-check > button:hover {
@@ -325,10 +328,8 @@ input:checked+.slider:before {
     padding: 10px 20px;
     margin: 0;
     background-color: var(--background);
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-radius: 10px;
     cursor: pointer;
-    /* border-right: 1px solid var(--background-alt); */
 }
 
 /* When a radio button is checked, style the corresponding label */
@@ -348,4 +349,73 @@ input:checked+.slider:before {
 
 .radio-group.round label:last-child {
     border-bottom-right-radius: 10px;
+}
+
+/* Cron unit builder (day-of-month / month / day-of-week / year inputs) */
+.cron-field {
+    margin-bottom: 1.25rem;
+}
+
+.cron-field-label {
+    font-size: .85rem;
+    opacity: .8;
+}
+
+.cron-mode-group {
+    margin-bottom: 0.5rem;
+}
+
+.cron-field-detail {
+    display: flex;
+    gap: .5rem;
+}
+
+.cron-field-detail input[type="number"],
+.cron-field-detail input[type="text"] {
+    width: 100%;
+}
+
+.cron-field-range {
+    display: flex;
+    gap: .5rem;
+    width: 100%;
+}
+
+.cron-field-hint {
+    display: block;
+    margin: -.25rem 0 .5rem;
+    opacity: .7;
+}
+
+.cron-field-list {
+    width: 100%;
+}
+
+.cron-field-checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+}
+
+.cron-field-checkbox-group label {
+    padding: 10px 14px;
+    margin: 0;
+    background-color: var(--background);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.cron-field-checkbox-group input[type="checkbox"]:checked+label {
+    background-color: var(--selection);
+    color: var(--form-text);
+}
+
+.cron-field-checkbox-group input[type="checkbox"] {
+    display: none;
+}
+
+/* Overdue occurrence count badge on the todo list */
+.todo-overdue-count {
+    color: var(--overdue);
+    font-size: .85rem;
 }

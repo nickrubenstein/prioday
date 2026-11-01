@@ -11,29 +11,10 @@ class DetailController {
             source: 'Device',
         };
 
-        this.formTodoFrequencyUnitValue = 'd';
-        this.formTodoFrequencyCountValue = 1;
+        this.cronFieldInputs = {};
         this.todoList = [this.formTodo];
         this.todoParamId = null;
         this.isNewTodo = false;
-    }
-
-    get formTodoFrequencyUnit() {
-        return this.formTodoFrequencyUnitValue;
-    }
-
-    set formTodoFrequencyUnit(unit) {
-        this.formTodoFrequencyUnitValue = unit;
-        this.updateFrequency();
-    }
-
-    get formTodoFrequencyCount() {
-        return this.formTodoFrequencyCountValue;
-    }
-
-    set formTodoFrequencyCount(count) {
-        this.formTodoFrequencyCountValue = count;
-        this.updateFrequency();
     }
 
     get formTodoLastDoneDate() {
@@ -50,21 +31,6 @@ class DetailController {
 
     get todaysDate() {
         return window.__date.formatDate(Date.now());
-    }
-
-    get formTodoFrequencyDisplay() {
-        var display = "" + this.formTodoFrequencyCount;
-        switch(this.formTodoFrequencyUnit) {
-            case 'd': display += ' day'; break;
-            case 'w': display += ' week'; break;
-            case 'm': display += ' month'; break;
-            case 'y': display += ' year'; break;
-            default: break;
-        }
-        if (this.formTodoFrequencyCount > 1) {
-            display += 's';
-        }
-        return display;
     }
 
     saveTodoList() {
@@ -118,21 +84,51 @@ class DetailController {
         }
     }
 
-    updateFrequencyDisplay() {
-        const { unit, count } = window.__cron.parseFrequency(this.formTodo.frequency);
-        this.formTodoFrequencyUnitValue = unit;
-        this.formTodoFrequencyCountValue = count;
+    // Builds the four cron unit inputs (day-of-month, month, day-of-week, year). Each is the
+    // same reusable CronFieldInput control, just configured with its own bounds, and every
+    // change re-assembles the frequency string from all four current values.
+    setupFrequencyInputs() {
+        const onChange = () => this.updateFrequencyFromInputs();
+
+        for (const name of Object.keys(window.__cron.FIELD_LABELS)) {
+            this.cronFieldInputs[name] = new CronFieldInput(document.getElementById(`cron-${name}-field`), {
+                name,
+                label: window.__cron.FIELD_LABELS[name],
+                ...window.__cron.getFieldRange(name),
+                valueLabels: window.__cron.FIELD_VALUE_LABELS[name],
+                onChange,
+            });
+        }
     }
 
-    updateFrequency() {
-        this.formTodo.frequency = window.__cron.formatFrequency(this.formTodoFrequencyUnit, this.formTodoFrequencyCount);
+    // Pushes the current formTodo.frequency into each cron field input, e.g. when loading an
+    // existing todo for editing.
+    syncFrequencyInputsFromTodo() {
+        const fields = window.__cron.parseFields(this.formTodo.frequency);
+        this.cronFieldInputs.dayOfMonth.setValue(fields.dayOfMonth);
+        this.cronFieldInputs.month.setValue(fields.month);
+        this.cronFieldInputs.dayOfWeek.setValue(fields.dayOfWeek);
+        this.cronFieldInputs.year.setValue(fields.year);
+        this.updateFrequencyDisplayText();
+    }
+
+    updateFrequencyFromInputs() {
+        this.formTodo.frequency = window.__cron.formatFields({
+            second: '0',
+            minute: '0',
+            hour: '0',
+            dayOfMonth: this.cronFieldInputs.dayOfMonth.getValue(),
+            month: this.cronFieldInputs.month.getValue(),
+            dayOfWeek: this.cronFieldInputs.dayOfWeek.getValue(),
+            year: this.cronFieldInputs.year.getValue(),
+        });
         this.updateFrequencyDisplayText();
     }
 
     updateFrequencyDisplayText() {
         const displayElement = document.getElementById('frequency-display');
         if (displayElement) {
-            displayElement.textContent = this.formTodoFrequencyDisplay;
+            displayElement.textContent = window.__cron.frequencyDescription(this.formTodo.frequency);
         }
     }
 
@@ -158,13 +154,8 @@ class DetailController {
             countInput.value = this.formTodo.count;
         }
 
-        // Update frequency radio buttons
-        const frequencyRadio = document.querySelector(`input[name="frequency"][value="${this.formTodoFrequencyUnit}"]`);
-        if (frequencyRadio) {
-            frequencyRadio.checked = true;
-        }
-
-        document.getElementById('number').value = this.formTodoFrequencyCount;
+        // Update frequency unit inputs
+        this.syncFrequencyInputsFromTodo();
 
         const lastDoneInput = document.getElementById('lastDone');
         if (lastDoneInput) {
@@ -183,9 +174,6 @@ class DetailController {
 
         // Show/hide elements based on mode
         this.updateModeVisibility();
-
-        // Update frequency display
-        this.updateFrequencyDisplayText();
     }
 
     updateCountVisibility() {
@@ -268,7 +256,7 @@ class DetailController {
             }
         }
 
-        this.updateFrequencyDisplay();
+        this.setupFrequencyInputs();
         this.setupEventListeners();
         this.updateUI();
     }
@@ -323,19 +311,6 @@ class DetailController {
         // Count input
         document.getElementById('count').addEventListener('input', (e) => {
             this.formTodo.count = parseInt(e.target.value) || 0;
-        });
-
-        // Frequency radio buttons
-        const frequencyRadios = document.querySelectorAll('input[name="frequency"]');
-        frequencyRadios.forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                this.formTodoFrequencyUnit = e.target.value;
-            });
-        });
-
-        // Frequency count input
-        document.getElementById('number').addEventListener('input', (e) => {
-            this.formTodoFrequencyCount = parseInt(e.target.value) || 1;
         });
 
         // Last done date input (only if exists)
