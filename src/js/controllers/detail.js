@@ -4,7 +4,7 @@ class DetailController {
             id: crypto.randomUUID(),
             text: '',
             repeat: true,
-            frequency: window.__cron.formatFrequency('d', 1),
+            frequency: window.__cron.formatFields({ second: '0', minute: '0', hour: '0' }),
             count: 1,
             lastDone: 0,
             lastLastDone: 0,
@@ -93,9 +93,7 @@ class DetailController {
         for (const name of Object.keys(window.__cron.FIELD_LABELS)) {
             this.cronFieldInputs[name] = new CronFieldInput(document.getElementById(`cron-${name}-field`), {
                 name,
-                label: window.__cron.FIELD_LABELS[name],
                 ...window.__cron.getFieldRange(name),
-                valueLabels: window.__cron.FIELD_VALUE_LABELS[name],
                 onChange,
             });
         }

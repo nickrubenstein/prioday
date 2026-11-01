@@ -1,82 +1,19 @@
-// Reusable input for a single cron unit (day-of-month, month, day-of-week, or year). Lets the
-// user pick one of: any value, a comma list, a dash range, or a "*/n" step, and exposes the
-// result as the plain cron field string - never raw string typing.
+// Reusable behavior for a single cron unit control (day-of-month, month, day-of-week, or year).
+// Lets the user pick one of: any value, a comma list, a dash range, or a "*/n" step, and exposes
+// the result as the plain cron field string - never raw string typing.
 //
-// Pass valueLabels (an array indexed by the field's numeric value, e.g. day-of-week's
-// ['Sun', 'Mon', ...]) to show short names instead of raw numbers for List/Range modes.
+// The markup for each field (radios, list/range/step inputs, checkbox or select options) lives
+// directly in the page HTML - see detail.html - so this class only looks up the elements that are
+// already there and wires up behavior. It never builds or assigns HTML from script.
 class CronFieldInput {
     constructor(container, config) {
         this.container = container;
         this.name = config.name;
-        this.label = config.label;
-        this.min = config.min;
-        this.max = config.max;
-        this.hint = config.hint || '';
-        this.valueLabels = config.valueLabels || null;
-        this.hasLabels = Array.isArray(this.valueLabels);
         this.onChange = config.onChange || (() => {});
         this.mode = 'wildcard';
 
-        this.render();
-    }
-
-    renderListDetail() {
-        if (!this.hasLabels) {
-            return `<input type="text" id="${this.name}-list"
-                placeholder="e.g. ${this.min},${this.min + 1},${this.max}">`;
-        }
-        let options = '';
-        for (let v = this.min; v <= this.max; v++) {
-            options += `
-                <input type="checkbox" id="${this.name}-list-${v}" value="${v}">
-                <label for="${this.name}-list-${v}">${this.valueLabels[v]}</label>
-            `;
-        }
-        return `<div class="cron-field-checkbox-group">${options}</div>`;
-    }
-
-    renderRangeDetail() {
-        if (!this.hasLabels) {
-            return `
-                <input type="number" id="${this.name}-range-min" min="${this.min}" max="${this.max}" placeholder="From">
-                <input type="number" id="${this.name}-range-max" min="${this.min}" max="${this.max}" placeholder="To">
-            `;
-        }
-        let options = '';
-        for (let v = this.min; v <= this.max; v++) {
-            options += `<option value="${v}">${this.valueLabels[v]}</option>`;
-        }
-        return `
-            <select id="${this.name}-range-min">${options}</select>
-            <select id="${this.name}-range-max">${options}</select>
-        `;
-    }
-
-    render() {
-        this.container.innerHTML = `
-            <label class="cron-field-label">${this.label}</label>
-            <div class="radio-group cron-mode-group">
-                <input type="radio" id="${this.name}-mode-wildcard" name="${this.name}-mode" value="wildcard" checked>
-                <label for="${this.name}-mode-wildcard">All</label>
-
-                <input type="radio" id="${this.name}-mode-step" name="${this.name}-mode" value="step">
-                <label for="${this.name}-mode-step">Every</label>
-
-                <input type="radio" id="${this.name}-mode-list" name="${this.name}-mode" value="list">
-                <label for="${this.name}-mode-list">List</label>
-
-                <input type="radio" id="${this.name}-mode-range" name="${this.name}-mode" value="range">
-                <label for="${this.name}-mode-range">Range</label>
-            </div>
-            <div class="cron-field-detail">
-                <div class="cron-field-list" style="display:none;">${this.renderListDetail()}</div>
-                <div class="cron-field-range" style="display:none;">${this.renderRangeDetail()}</div>
-                <input class="cron-field-step" type="number" id="${this.name}-step" min="1" placeholder="Every N" style="display:none;">
-            </div>
-            ${this.hint ? `<small class="cron-field-hint">${this.hint}</small>` : ''}
-        `;
-
         this.cacheElements();
+        this.applyDynamicBounds(config.min, config.max);
         this.attachListeners();
         this.updateVisibility();
     }
@@ -86,10 +23,29 @@ class CronFieldInput {
         this.listContainer = this.container.querySelector('.cron-field-list');
         this.listInput = this.container.querySelector(`#${this.name}-list`);
         this.listCheckboxes = this.container.querySelectorAll('.cron-field-list input[type="checkbox"]');
+        this.hasLabels = this.listCheckboxes.length > 0;
         this.rangeContainer = this.container.querySelector('.cron-field-range');
         this.rangeMinInput = this.container.querySelector(`#${this.name}-range-min`);
         this.rangeMaxInput = this.container.querySelector(`#${this.name}-range-max`);
         this.stepInput = this.container.querySelector(`#${this.name}-step`);
+    }
+
+    // Most fields' bounds are fixed and already baked into their HTML (e.g. day-of-month's
+    // 1-31). Year's bounds depend on the current year though, so they're set here as plain
+    // element properties - never parsed as markup - rather than rendered from script.
+    applyDynamicBounds(min, max) {
+        if (this.hasLabels || min === undefined || max === undefined) {
+            return;
+        }
+        if (this.listInput) {
+            this.listInput.placeholder = `e.g. ${min},${min + 1},${max}`;
+        }
+        if (this.rangeMinInput && this.rangeMaxInput) {
+            this.rangeMinInput.min = min;
+            this.rangeMinInput.max = max;
+            this.rangeMaxInput.min = min;
+            this.rangeMaxInput.max = max;
+        }
     }
 
     attachListeners() {
